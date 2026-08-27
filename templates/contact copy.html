@@ -1,0 +1,532 @@
+{% extends "base.html" %}
+
+{% block title %}
+Contact Us | Prime Estates
+{% endblock %}
+
+
+{% block content %}
+
+<section class="contact-page">
+
+    <div class="container">
+
+        <div class="contact-header">
+
+            <span>
+                GET IN TOUCH
+            </span>
+
+            <h1>
+                Let's Talk About Your Property
+            </h1>
+
+            <p>
+                Have a question about a property?
+                Send us your details and our team
+                will contact you.
+            </p>
+
+        </div>
+
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div class="alert alert-success">
+
+                    {{ message }}
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+
+        <div class="row g-5">
+
+
+            <div class="col-lg-7">
+
+                <div class="contact-form-card">
+
+                    <h2>
+                        Send an Enquiry
+                    </h2>
+
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+
+                        {% if selected_property %}
+
+                            <div class="selected-property">
+
+                                <span>
+                                    Property Enquiry
+                                </span>
+
+                                <strong>
+                                    {{ selected_property.title }}
+                                </strong>
+
+                                <input
+                                    type="hidden"
+                                    name="property_id"
+                                    value="{{ selected_property.property_id }}"
+                                >
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <div class="row g-3">
+
+
+                            <div class="col-md-6">
+
+                                <label>
+                                    Full Name *
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="name"
+                                    class="form-control"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label>
+                                    Phone Number *
+                                </label>
+
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        class="form-control"
+                                        required
+                                        minlength="10"
+                                        maxlength="10"
+                                        pattern="[6-9][0-9]{9}"
+                                        inputmode="numeric"
+                                        placeholder="Enter 10-digit mobile number"
+                                        title="Enter a valid 10-digit Indian mobile number"
+                                    >
+
+                            </div>
+
+
+                            <div class="col-12">
+
+                                <label>
+                                    Email Address
+                                </label>
+
+                                <input
+                                    type="email"
+                                    name="email"
+                                    class="form-control"
+                                >
+
+                            </div>
+
+
+                            <div class="col-12">
+
+                                <label>
+                                    Enquiry Type
+                                </label>
+
+                                <select
+                                    name="enquiry_type"
+                                    class="form-select"
+                                >
+
+                                    <option value="property">
+                                        Property Enquiry
+                                    </option>
+
+                                    <option value="general">
+                                        General Enquiry
+                                    </option>
+
+                                    <option value="callback">
+                                        Request Callback
+                                    </option>
+
+                                    <option value="visit">
+                                        Property Visit
+                                    </option>
+
+                                    <option value="home_loan">
+                                        Home Loan
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="col-12">
+
+                                <label>
+                                    Message
+                                </label>
+
+                                <textarea
+                                    name="message"
+                                    class="form-control"
+                                    rows="5"
+                                    placeholder="Tell us what you are looking for..."
+                                ></textarea>
+
+                            </div>
+
+
+                            <div class="col-12">
+
+                                <button
+                                    type="submit"
+                                    class="submit-enquiry"
+                                >
+
+                                    Send Enquiry
+
+                                    <i class="fa-solid fa-arrow-right"></i>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-5">
+
+
+                <div class="contact-info-card">
+
+                    <h2>
+                        Contact Information
+                    </h2>
+
+
+                    <div class="contact-info-item">
+
+                        <div>
+                            <i class="fa-solid fa-phone"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Call Us
+                            </span>
+
+                            <strong>
+                                +91 98765 43210
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="contact-info-item">
+
+                        <div>
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Email Us
+                            </span>
+
+                            <strong>
+                                info@primeestates.com
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="contact-info-item">
+
+                        <div>
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Visit Us
+                            </span>
+
+                            <strong>
+                                Hyderabad, Telangana, India
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="contact-info-item">
+
+                        <div>
+                            <i class="fa-solid fa-clock"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Working Hours
+                            </span>
+
+                            <strong>
+                                Mon - Sat: 9 AM - 7 PM
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+.contact-page {
+
+    padding: 70px 0 100px;
+
+}
+
+.contact-header {
+
+    text-align: center;
+
+    max-width: 750px;
+
+    margin: 0 auto 50px;
+
+}
+
+.contact-header span {
+
+    color: #8b5e3c;
+
+    letter-spacing: 2px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+.contact-header h1 {
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 48px;
+
+    margin: 12px 0;
+
+}
+
+.contact-header p {
+
+    color: #777;
+
+}
+
+.contact-form-card {
+
+    background: white;
+
+    border: 1px solid #eee6de;
+
+    border-radius: 15px;
+
+    padding: 35px;
+
+}
+
+.contact-form-card h2,
+.contact-info-card h2 {
+
+    font-family: "Playfair Display", serif;
+
+    margin-bottom: 25px;
+
+}
+
+.contact-form-card label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-weight: 600;
+
+    font-size: 14px;
+
+}
+
+.contact-form-card input,
+.contact-form-card select {
+
+    height: 48px;
+
+}
+
+.contact-form-card textarea {
+
+    resize: vertical;
+
+}
+
+.selected-property {
+
+    background: #faf5ef;
+
+    border-left: 4px solid #8b5e3c;
+
+    padding: 15px;
+
+    margin-bottom: 25px;
+
+}
+
+.selected-property span {
+
+    display: block;
+
+    color: #8b5e3c;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+.selected-property strong {
+
+    display: block;
+
+    margin-top: 5px;
+
+}
+
+.submit-enquiry {
+
+    border: none;
+
+    background: #8b5e3c;
+
+    color: white;
+
+    padding: 13px 25px;
+
+    border-radius: 7px;
+
+    font-weight: 600;
+
+}
+
+.contact-info-card {
+
+    background: #332820;
+
+    color: white;
+
+    border-radius: 15px;
+
+    padding: 35px;
+
+}
+
+.contact-info-item {
+
+    display: flex;
+
+    gap: 15px;
+
+    margin-bottom: 25px;
+
+}
+
+.contact-info-item > div:first-child {
+
+    width: 45px;
+
+    height: 45px;
+
+    flex-shrink: 0;
+
+    border-radius: 8px;
+
+    background: #8b5e3c;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+.contact-info-item span {
+
+    display: block;
+
+    color: #bdb1a8;
+
+    font-size: 12px;
+
+}
+
+.contact-info-item strong {
+
+    display: block;
+
+    margin-top: 4px;
+
+}
+
+</style>
+
+{% endblock %}

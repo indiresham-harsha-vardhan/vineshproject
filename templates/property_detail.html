@@ -1,0 +1,1047 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ property.title }} | Prime Estates
+{% endblock %}
+
+
+{% block content %}
+
+<section class="property-detail-page">
+
+    <div class="container">
+
+        <!-- BREADCRUMB -->
+
+        <div class="property-breadcrumb">
+
+            <a href="{% url 'property_list' %}">
+                Properties
+            </a>
+
+            <span>
+                /
+            </span>
+
+            <span>
+                {{ property.title }}
+            </span>
+
+        </div>
+
+
+        <!-- IMAGE GALLERY -->
+
+        <div class="property-gallery">
+
+            <div class="main-property-image">
+
+                {% with property.images.all|first as image %}
+
+                    {% if image %}
+
+                    <img
+                        id="mainPropertyImage"
+                        src="{{ image.image.url }}"
+                        alt="{{ property.title }}"
+                    >
+
+                    {% else %}
+
+                    <div class="no-detail-image">
+
+                        <i class="fa-solid fa-house"></i>
+
+                    </div>
+
+                    {% endif %}
+
+                {% endwith %}
+
+            </div>
+
+
+            <div class="property-thumbnails">
+
+                {% for image in property.images.all %}
+
+                <button
+                    type="button"
+                    class="property-thumbnail"
+                    onclick="changePropertyImage(
+                        '{{ image.image.url }}'
+                    )"
+                >
+
+                    <img
+                        src="{{ image.image.url }}"
+                        alt="{{ property.title }}"
+                    >
+
+                </button>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <!-- PROPERTY INFORMATION -->
+
+        <div class="property-detail-layout">
+
+
+            <!-- LEFT -->
+
+            <div class="property-main-content">
+
+
+                <div class="property-detail-badges">
+
+                    <span class="detail-type">
+
+                        {{ property.property_type.name }}
+
+                    </span>
+
+
+                    <span class="detail-status">
+
+                        {{ property.get_status_display }}
+
+                    </span>
+
+                </div>
+
+
+                <h1>
+
+                    {{ property.title }}
+
+                </h1>
+
+
+                <div class="detail-location">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    {{ property.location }}
+
+                    {% if property.city %}
+
+                        , {{ property.city }}
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- PRICE -->
+
+                <div class="detail-price">
+
+                    {% if property.price %}
+
+                        ₹ {{ property.price|floatformat:0 }}
+
+                    {% else %}
+
+                        Price on Request
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- DETAILS -->
+
+                <div class="detail-section">
+
+                    <h2>
+                        Property Details
+                    </h2>
+
+
+                    <div class="detail-grid">
+
+
+                        {% if property.area_sqft %}
+
+                        <div class="detail-item">
+
+                            <span>
+                                Area
+                            </span>
+
+                            <strong>
+
+                                {{ property.area_sqft }}
+                                Sq.Ft
+
+                            </strong>
+
+                        </div>
+
+                        {% endif %}
+
+
+                        <div class="detail-item">
+
+                            <span>
+                                Property Type
+                            </span>
+
+                            <strong>
+
+                                {{ property.property_type.name }}
+
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span>
+                                Location
+                            </span>
+
+                            <strong>
+
+                                {{ property.location }}
+
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span>
+                                Status
+                            </span>
+
+                            <strong>
+
+                                {{ property.get_status_display }}
+
+                            </strong>
+
+                        </div>
+
+
+                        {% if property.bedrooms %}
+
+                        <div class="detail-item">
+
+                            <span>
+                                Bedrooms
+                            </span>
+
+                            <strong>
+
+                                {{ property.bedrooms }}
+
+                            </strong>
+
+                        </div>
+
+                        {% endif %}
+
+
+                        {% if property.bathrooms %}
+
+                        <div class="detail-item">
+
+                            <span>
+                                Bathrooms
+                            </span>
+
+                            <strong>
+
+                                {{ property.bathrooms }}
+
+                            </strong>
+
+                        </div>
+
+                        {% endif %}
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="detail-section">
+
+                    <h2>
+                        Description
+                    </h2>
+
+                    <div class="property-description">
+
+                        {{ property.description|linebreaks }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- AMENITIES -->
+
+                {% if property.amenities.all %}
+
+                <div class="detail-section">
+
+                    <h2>
+                        Amenities & Features
+                    </h2>
+
+
+                    <div class="amenities-list">
+
+                        {% for amenity in property.amenities.all %}
+
+                        <div class="amenity-item">
+
+                            <i class="fa-solid fa-check"></i>
+
+                            {{ amenity.name }}
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+
+            </div>
+
+
+            <!-- RIGHT CONTACT CARD -->
+
+            <div class="property-contact-card">
+
+                <div class="contact-card-inner">
+
+                    <span>
+                        INTERESTED IN THIS PROPERTY?
+                    </span>
+
+
+                    <h2>
+                        Let's Talk
+                    </h2>
+
+
+                    <p>
+                        Our property experts can
+                        provide complete information
+                        about this property.
+                    </p>
+
+
+                    <a
+                        href="{% url 'chat' %}"
+                        class="detail-chat-button"
+                    >
+
+                        <i class="fa-solid fa-comments"></i>
+
+                        Chat With Us
+
+                    </a>
+
+
+                    <a
+                        href="{% url 'contact' %}"
+                        class="detail-contact-button"
+                    >
+
+                        <i class="fa-solid fa-phone"></i>
+
+                        Contact Us
+
+                    </a>
+
+
+                    <div class="contact-card-divider">
+
+                        OR
+
+                    </div>
+
+
+                    <p class="contact-note">
+
+                        Mention the property name
+                        when contacting us.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- MAP -->
+
+        {% if property.google_maps_location %}
+
+        <div class="map-section">
+
+            <h2>
+                Property Location
+            </h2>
+
+
+            <div class="map-container">
+
+                <iframe
+                    src="{{ property.google_maps_location }}"
+                    loading="lazy"
+                    allowfullscreen
+                >
+                </iframe>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+    </div>
+
+</section>
+
+{% endblock %}
+{% block extra_js %}
+
+<script>
+
+function changePropertyImage(imageUrl) {
+
+    const mainImage =
+        document.getElementById(
+            "mainPropertyImage"
+        );
+
+    if (mainImage) {
+
+        mainImage.src = imageUrl;
+
+    }
+
+}
+
+</script>
+
+{% endblock %}
+{% block extra_css %}
+
+<style>
+
+.property-detail-page {
+
+    background: #faf8f5;
+
+    padding: 35px 0 100px;
+
+}
+
+
+/* BREADCRUMB */
+
+.property-breadcrumb {
+
+    display: flex;
+
+    gap: 10px;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+
+    font-size: 13px;
+
+    color: #888;
+
+}
+
+
+.property-breadcrumb a {
+
+    color: #8b5e3c;
+
+    text-decoration: none;
+
+}
+
+
+/* GALLERY */
+
+.property-gallery {
+
+    background: white;
+
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    padding: 10px;
+
+    border: 1px solid #eee6de;
+
+}
+
+
+.main-property-image {
+
+    height: 550px;
+
+    overflow: hidden;
+
+    border-radius: 12px;
+
+}
+
+
+.main-property-image img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+}
+
+
+.no-detail-image {
+
+    width: 100%;
+
+    height: 100%;
+
+    background: #eee7df;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #8b5e3c;
+
+    font-size: 70px;
+
+}
+
+
+.property-thumbnails {
+
+    display: flex;
+
+    gap: 10px;
+
+    overflow-x: auto;
+
+    padding: 10px 0 0;
+
+}
+
+
+.property-thumbnail {
+
+    border: 2px solid transparent;
+
+    background: white;
+
+    padding: 0;
+
+    width: 90px;
+
+    height: 70px;
+
+    flex-shrink: 0;
+
+    border-radius: 7px;
+
+    overflow: hidden;
+
+    cursor: pointer;
+
+}
+
+
+.property-thumbnail:hover {
+
+    border-color: #8b5e3c;
+
+}
+
+
+.property-thumbnail img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+}
+
+
+/* LAYOUT */
+
+.property-detail-layout {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 350px;
+
+    gap: 45px;
+
+    margin-top: 45px;
+
+}
+
+
+/* BADGES */
+
+.property-detail-badges {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-bottom: 15px;
+
+}
+
+
+.detail-type,
+.detail-status {
+
+    padding: 6px 13px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+}
+
+
+.detail-type {
+
+    background: #8b5e3c;
+
+    color: white;
+
+}
+
+
+.detail-status {
+
+    background: #e8f2e5;
+
+    color: #507346;
+
+}
+
+
+.property-main-content h1 {
+
+    font-family:
+        "Playfair Display",
+        serif;
+
+    font-size:
+        clamp(35px, 5vw, 55px);
+
+    margin-bottom: 12px;
+
+}
+
+
+.detail-location {
+
+    color: #777;
+
+    font-size: 15px;
+
+}
+
+
+.detail-location i {
+
+    color: #8b5e3c;
+
+}
+
+
+.detail-price {
+
+    color: #8b5e3c;
+
+    font-size: 30px;
+
+    font-weight: 700;
+
+    margin-top: 20px;
+
+}
+
+
+/* SECTIONS */
+
+.detail-section {
+
+    background: white;
+
+    border: 1px solid #eee6de;
+
+    border-radius: 15px;
+
+    padding: 30px;
+
+    margin-top: 30px;
+
+}
+
+
+.detail-section h2 {
+
+    font-family:
+        "Playfair Display",
+        serif;
+
+    margin-top: 0;
+
+    margin-bottom: 25px;
+
+}
+
+
+/* DETAILS GRID */
+
+.detail-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 20px;
+
+}
+
+
+.detail-item {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+    border-bottom:
+        1px solid #eee;
+
+    padding-bottom: 12px;
+
+}
+
+
+.detail-item span {
+
+    color: #888;
+
+    font-size: 12px;
+
+}
+
+
+.detail-item strong {
+
+    color: #332820;
+
+}
+
+
+/* DESCRIPTION */
+
+.property-description {
+
+    color: #666;
+
+    line-height: 1.8;
+
+}
+
+
+/* AMENITIES */
+
+.amenities-list {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 15px;
+
+}
+
+
+.amenity-item {
+
+    color: #555;
+
+}
+
+
+.amenity-item i {
+
+    color: #8b5e3c;
+
+    margin-right: 8px;
+
+}
+
+
+/* CONTACT CARD */
+
+.property-contact-card {
+
+    position: relative;
+
+}
+
+
+.contact-card-inner {
+
+    background: #332820;
+
+    color: white;
+
+    padding: 35px;
+
+    border-radius: 18px;
+
+    position: sticky;
+
+    top: 100px;
+
+}
+
+
+.contact-card-inner > span {
+
+    color: #c9a98f;
+
+    font-size: 11px;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+.contact-card-inner h2 {
+
+    font-family:
+        "Playfair Display",
+        serif;
+
+    font-size: 32px;
+
+    margin: 12px 0;
+
+}
+
+
+.contact-card-inner p {
+
+    color: #d4cbc4;
+
+    line-height: 1.6;
+
+    font-size: 14px;
+
+}
+
+
+.detail-chat-button,
+.detail-contact-button {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 13px;
+
+    border-radius: 7px;
+
+    text-decoration: none;
+
+    margin-top: 15px;
+
+    font-weight: 600;
+
+}
+
+
+.detail-chat-button {
+
+    background: #8b5e3c;
+
+    color: white;
+
+}
+
+
+.detail-contact-button {
+
+    background: white;
+
+    color: #332820;
+
+}
+
+
+.contact-card-divider {
+
+    text-align: center;
+
+    color: #8f8178;
+
+    font-size: 11px;
+
+    margin: 20px 0;
+
+}
+
+
+.contact-note {
+
+    text-align: center;
+
+    font-size: 12px !important;
+
+}
+
+
+/* MAP */
+
+.map-section {
+
+    margin-top: 50px;
+
+}
+
+
+.map-section h2 {
+
+    font-family:
+        "Playfair Display",
+        serif;
+
+}
+
+
+.map-container {
+
+    height: 400px;
+
+    background: #eee;
+
+    border-radius: 15px;
+
+    overflow: hidden;
+
+}
+
+
+.map-container iframe {
+
+    width: 100%;
+
+    height: 100%;
+
+    border: 0;
+
+}
+
+
+/* MOBILE */
+
+@media(max-width:900px) {
+
+    .property-detail-layout {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .contact-card-inner {
+
+        position: static;
+
+    }
+
+}
+
+
+@media(max-width:600px) {
+
+    .main-property-image {
+
+        height: 350px;
+
+    }
+
+
+    .detail-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .amenities-list {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .detail-section {
+
+        padding: 20px;
+
+    }
+
+}
+
+</style>
+
+{% endblock %}

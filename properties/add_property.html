@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>Add Property</title>
+
+</head>
+
+
+<body>
+
+    <h1>Add Property</h1>
+
+
+    <form method="POST" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+
+        {{ form.as_p }}
+
+
+        <h2>Property Images</h2>
+
+        <input
+            type="file"
+            name="images"
+            multiple
+            accept="image/*"
+        >
+
+
+        <h2>Property Videos</h2>
+
+        <input
+            type="file"
+            name="videos"
+            multiple
+            accept="video/*"
+        >
+
+
+        <h3>Video URL</h3>
+
+        <input
+            type="url"
+            name="video_url"
+            placeholder="https://youtube.com/..."
+        >
+
+
+        <br><br>
+
+
+        <button type="submit">
+            Save Property
+        </button>
+
+    </form>
+
+</body>
+
+</html>

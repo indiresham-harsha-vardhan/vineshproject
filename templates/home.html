@@ -1,0 +1,1233 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+Home | Prime Estates
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<!-- =====================================
+     HERO
+===================================== -->
+
+<section class="hero-section">
+
+    <div class="container">
+
+        <div class="hero-content">
+
+            <span class="hero-small-title">
+
+                PREMIUM REAL ESTATE
+
+            </span>
+
+
+            <h1>
+
+                Find Your
+                <span>Perfect Property</span>
+
+            </h1>
+
+
+            <p>
+
+                Discover premium lands, villas,
+                resorts and investment opportunities
+                in the best locations.
+
+            </p>
+
+
+            <div class="hero-buttons">
+
+                <a
+                    href="/properties/"
+                    class="btn btn-primary-custom"
+                >
+
+                    Explore Properties
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </a>
+
+
+                <a
+                    href="/contact/"
+                    class="btn btn-outline-light"
+                >
+
+                    Contact Us
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================
+     CATEGORIES
+===================================== -->
+
+<section class="categories-section">
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <span>
+                EXPLORE
+            </span>
+
+            <h2>
+                Find What You're Looking For
+            </h2>
+
+            <p>
+                Explore our wide range of premium
+                properties.
+            </p>
+
+        </div>
+
+
+        <div class="row g-4">
+
+
+            <!-- LAND -->
+
+            <div class="col-lg-4 col-md-6">
+
+                <a
+                    href="/properties/?type=land"
+                    class="category-card"
+                >
+
+                    <div class="category-icon">
+
+                        <i class="fa-solid fa-map"></i>
+
+                    </div>
+
+                    <h3>
+                        Lands & Plots
+                    </h3>
+
+                    <p>
+                        Premium residential,
+                        agricultural and investment lands.
+                    </p>
+
+                    <span>
+                        Explore
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+
+                </a>
+
+            </div>
+
+
+            <!-- VILLAS -->
+
+            <div class="col-lg-4 col-md-6">
+
+                <a
+                    href="/properties/?type=villa"
+                    class="category-card"
+                >
+
+                    <div class="category-icon">
+
+                        <i class="fa-solid fa-house"></i>
+
+                    </div>
+
+                    <h3>
+                        Villas
+                    </h3>
+
+                    <p>
+                        Luxury villas and independent
+                        homes in prime locations.
+                    </p>
+
+                    <span>
+                        Explore
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+
+                </a>
+
+            </div>
+
+
+            <!-- RESORT -->
+
+            <div class="col-lg-4 col-md-6">
+
+                <a
+                    href="/properties/?type=resort"
+                    class="category-card"
+                >
+
+                    <div class="category-icon">
+
+                        <i class="fa-solid fa-umbrella-beach"></i>
+
+                    </div>
+
+                    <h3>
+                        Resorts
+                    </h3>
+
+                    <p>
+                        Premium resorts and
+                        hospitality properties.
+                    </p>
+
+                    <span>
+                        Explore
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="property-categories">
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <span>
+                EXPLORE BY CATEGORY
+            </span>
+
+            <h2>
+                Find What You're Looking For
+            </h2>
+
+            <p>
+                Explore properties based on your
+                investment and lifestyle needs.
+            </p>
+
+        </div>
+
+
+        <div class="row g-4">
+
+            {% for type in property_types %}
+
+            <div class="col-lg-3 col-md-4 col-6">
+
+                <a
+                    href="/properties/?type={{ type.slug }}"
+                    class="property-category-card"
+                >
+
+                    <div class="category-icon">
+
+                        <i class="fa-solid fa-building"></i>
+
+                    </div>
+
+
+                    <h3>
+                        {{ type.name }}
+                    </h3>
+
+
+                    <span>
+
+                        Explore Properties
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </span>
+
+                </a>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =====================================
+     FEATURED PROPERTIES
+===================================== -->
+
+<section class="featured-properties">
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <span>
+                FEATURED PROPERTIES
+            </span>
+
+            <h2>
+                Handpicked Properties For You
+            </h2>
+
+            <p>
+                Explore some of our most carefully selected
+                properties and investment opportunities.
+            </p>
+
+        </div>
+
+
+        <div class="row g-4">
+
+            {% for property in featured_properties %}
+
+                <div class="col-lg-4 col-md-6">
+
+                    <div class="home-property-card">
+
+                        <!-- PROPERTY IMAGE -->
+
+                        <div class="home-property-image">
+
+                            {% with property.images.all|first as image %}
+
+                                {% if image %}
+
+                                    <img
+                                        src="{{ image.image.url }}"
+                                        alt="{{ property.title }}"
+                                    >
+
+                                {% else %}
+
+                                    <div class="home-no-image">
+
+                                        <i class="fa-solid fa-house"></i>
+
+                                    </div>
+
+                                {% endif %}
+
+                            {% endwith %}
+
+
+                            <!-- PROPERTY TYPE -->
+
+                            <span class="home-property-type">
+
+                                {{ property.property_type.name }}
+
+                            </span>
+
+                        </div>
+
+
+                        <!-- PROPERTY DETAILS -->
+
+                        <div class="home-property-content">
+
+                            <h3>
+                                {{ property.title }}
+                            </h3>
+
+                            <p class="home-property-location">
+
+                                <i class="fa-solid fa-location-dot"></i>
+
+                                {{ property.city }}, {{ property.state }}
+
+                            </p>
+
+
+                            {% if property.price %}
+
+                                <div class="home-property-price">
+
+                                    ₹{{ property.price|floatformat:0 }}
+
+                                </div>
+
+                            {% else %}
+
+                                <div class="home-property-price">
+
+                                    Price on Request
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <a
+                                href="{% url 'property_detail' property.slug %}"
+                                class="btn btn-primary-custom"
+                            >
+
+                                View Property
+
+                                <i class="fa-solid fa-arrow-right"></i>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% empty %}
+
+                <div class="col-12">
+
+                    <p class="text-center">
+
+                        No featured properties available yet.
+
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =====================================
+     CTA
+===================================== -->
+
+<section class="cta-section">
+
+    <div class="container">
+
+        <div class="cta-box">
+
+            <div>
+
+                <span>
+                    HAVE A PROPERTY IN MIND?
+                </span>
+
+                <h2>
+                    Let's Find Your Perfect Investment
+                </h2>
+
+            </div>
+
+
+            <a
+                href="/contact/"
+                class="btn btn-primary-custom"
+            >
+
+                Talk To Us
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+{% endblock %}
+
+
+
+{% block extra_css %}
+
+<style>
+
+
+/* HERO */
+
+.hero-section {
+
+    min-height: 620px;
+
+    display: flex;
+
+    align-items: center;
+
+    position: relative;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(25, 19, 15, 0.85),
+            rgba(25, 19, 15, 0.35)
+        ),
+        url("https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&q=80");
+
+    background-size: cover;
+
+    background-position: center;
+
+    color: white;
+
+}
+
+
+.hero-content {
+
+    max-width: 700px;
+
+}
+
+
+.hero-small-title {
+
+    letter-spacing: 3px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+.hero-content h1 {
+
+    font-family: "Playfair Display", serif;
+
+    font-size: clamp(48px, 7vw, 78px);
+
+    line-height: 1.05;
+
+    margin: 20px 0;
+
+}
+
+
+.hero-content h1 span {
+
+    display: block;
+
+    color: #d7aa7c;
+
+}
+
+
+.hero-content p {
+
+    font-size: 18px;
+
+    max-width: 600px;
+
+    color: #eee;
+
+}
+
+
+.hero-buttons {
+
+    display: flex;
+
+    gap: 15px;
+
+    margin-top: 30px;
+
+}
+
+
+/* CATEGORIES */
+
+.categories-section {
+
+    padding: 90px 0;
+
+}
+
+
+.section-heading {
+
+    text-align: center;
+
+    max-width: 700px;
+
+    margin: 0 auto 50px;
+
+}
+
+
+.section-heading span {
+
+    color: #8b5e3c;
+
+    letter-spacing: 2px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+
+.section-heading h2 {
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 42px;
+
+    margin: 10px 0;
+
+}
+
+
+.section-heading p {
+
+    color: #777;
+
+}
+
+
+/* CATEGORY CARD */
+
+.category-card {
+
+    display: block;
+
+    padding: 40px 30px;
+
+    background: white;
+
+    border: 1px solid #eee6de;
+
+    border-radius: 15px;
+
+    text-decoration: none;
+
+    color: inherit;
+
+    transition: 0.3s;
+
+}
+
+
+.category-card:hover {
+
+    transform: translateY(-8px);
+
+    box-shadow:
+        0 20px 50px
+        rgba(70, 45, 30, 0.12);
+
+}
+
+
+.category-icon {
+
+    width: 60px;
+
+    height: 60px;
+
+    border-radius: 12px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #f2e8de;
+
+    color: #8b5e3c;
+
+    font-size: 22px;
+
+    margin-bottom: 25px;
+
+}
+
+
+.category-card h3 {
+
+    font-family: "Playfair Display", serif;
+
+}
+
+
+.category-card p {
+
+    color: #777;
+
+    line-height: 1.7;
+
+}
+
+
+.category-card span {
+
+    color: #8b5e3c;
+
+    font-weight: 600;
+
+}
+
+
+/* CTA */
+
+.cta-section {
+
+    padding: 0 0 80px;
+
+}
+
+
+.cta-box {
+
+    background: #332820;
+
+    color: white;
+
+    padding: 50px;
+
+    border-radius: 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 30px;
+
+}
+
+
+.cta-box span {
+
+    color: #c89d72;
+
+    font-size: 12px;
+
+    letter-spacing: 2px;
+
+    font-weight: 700;
+
+}
+
+
+.cta-box h2 {
+
+    font-family: "Playfair Display", serif;
+
+    margin: 10px 0 0;
+
+}
+
+
+@media(max-width: 768px) {
+
+    .hero-section {
+
+        min-height: 560px;
+
+    }
+
+    .hero-buttons {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+    .cta-box {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        padding: 35px 25px;
+
+    }
+
+    .section-heading h2 {
+
+        font-size: 34px;
+
+    }
+
+}
+
+
+.featured-properties {
+
+    padding: 90px 0;
+
+    background: #faf8f5;
+
+}
+
+
+.section-heading {
+
+    text-align: center;
+
+    max-width: 700px;
+
+    margin: 0 auto 50px;
+
+}
+
+
+.section-heading span {
+
+    color: #8b5e3c;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+}
+
+
+.section-heading h2 {
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 45px;
+
+    margin: 12px 0;
+
+}
+
+
+.section-heading p {
+
+    color: #777;
+
+}
+
+
+/* PROPERTY CARD */
+
+.home-property-card {
+
+    background: white;
+
+    border: 1px solid #eee6de;
+
+    border-radius: 15px;
+
+    overflow: hidden;
+
+    height: 100%;
+
+    transition: 0.3s;
+
+}
+
+
+.home-property-card:hover {
+
+    transform: translateY(-7px);
+
+    box-shadow:
+        0 20px 45px
+        rgba(50,35,25,0.12);
+
+}
+
+
+/* IMAGE */
+
+.home-property-image {
+
+    height: 260px;
+
+    position: relative;
+
+    overflow: hidden;
+
+}
+
+
+.home-property-image img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    transition: 0.5s;
+
+}
+
+
+.home-property-card:hover
+.home-property-image img {
+
+    transform: scale(1.06);
+
+}
+
+
+.home-no-image {
+
+    width: 100%;
+
+    height: 100%;
+
+    background: #eee7df;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    color: #8b5e3c;
+
+    font-size: 45px;
+
+}
+
+
+/* BADGES */
+
+.home-property-type {
+
+    position: absolute;
+
+    top: 15px;
+
+    left: 15px;
+
+    background: #8b5e3c;
+
+    color: white;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+}
+
+
+.home-property-status {
+
+    position: absolute;
+
+    top: 15px;
+
+    right: 15px;
+
+    background: white;
+
+    color: #8b5e3c;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+}
+
+
+/* CONTENT */
+
+.home-property-content {
+
+    padding: 25px;
+
+}
+
+
+.home-property-content h3 {
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 23px;
+
+    margin-bottom: 10px;
+
+}
+
+
+.home-property-location {
+
+    color: #777;
+
+    font-size: 14px;
+
+}
+
+
+.home-property-location i {
+
+    color: #8b5e3c;
+
+}
+
+
+.home-property-info {
+
+    display: flex;
+
+    gap: 18px;
+
+    border-top: 1px solid #eee;
+
+    border-bottom: 1px solid #eee;
+
+    padding: 15px 0;
+
+    margin: 18px 0;
+
+}
+
+
+.home-property-info span {
+
+    color: #666;
+
+    font-size: 13px;
+
+}
+
+
+.home-property-info i {
+
+    color: #8b5e3c;
+
+}
+
+
+.home-property-bottom {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+}
+
+
+.home-property-bottom strong {
+
+    color: #8b5e3c;
+
+    font-size: 17px;
+
+}
+
+
+.home-property-bottom a {
+
+    color: #8b5e3c;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+}
+
+
+.home-property-bottom a:hover {
+
+    color: #5f3e28;
+
+}
+
+
+.view-all-properties {
+
+    display: inline-block;
+
+    background: #8b5e3c;
+
+    color: white;
+
+    text-decoration: none;
+
+    padding: 13px 25px;
+
+    border-radius: 7px;
+
+    font-weight: 600;
+
+}
+
+
+.home-properties-empty {
+
+    text-align: center;
+
+    padding: 60px;
+
+    color: #777;
+
+}
+
+
+.home-properties-empty i {
+
+    font-size: 45px;
+
+    color: #8b5e3c;
+
+    margin-bottom: 15px;
+
+}
+
+
+@media(max-width: 768px) {
+
+    .section-heading h2 {
+
+        font-size: 36px;
+
+    }
+
+}
+
+
+.property-categories {
+
+    padding: 80px 0;
+
+    background: white;
+
+}
+
+
+.property-category-card {
+
+    display: block;
+
+    text-align: center;
+
+    text-decoration: none;
+
+    color: #332820;
+
+    background: #faf8f5;
+
+    border: 1px solid #eee6de;
+
+    border-radius: 15px;
+
+    padding: 30px 20px;
+
+    height: 100%;
+
+    transition: 0.3s;
+
+}
+
+
+.property-category-card:hover {
+
+    transform: translateY(-6px);
+
+    background: #f5ebe1;
+
+    color: #8b5e3c;
+
+}
+
+
+.category-icon {
+
+    width: 65px;
+
+    height: 65px;
+
+    margin: 0 auto 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #eee0d2;
+
+    color: #8b5e3c;
+
+    font-size: 25px;
+
+}
+
+
+.property-category-card h3 {
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 22px;
+
+    margin-bottom: 10px;
+
+}
+
+
+.property-category-card span {
+
+    font-size: 12px;
+
+    color: #888;
+
+}
+
+
+.property-category-card span i {
+
+    margin-left: 5px;
+
+}
+
+
+
+
+</style>
+
+{% endblock %}

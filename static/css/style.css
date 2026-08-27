@@ -1,0 +1,338 @@
+/* =====================================
+   GLOBAL
+===================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+
+    font-family: "DM Sans", sans-serif;
+
+    background: #f8f6f2;
+
+    color: #29231e;
+}
+
+
+/* =====================================
+   HEADER
+===================================== */
+
+.site-header {
+    background: #ffffff;
+
+    border-bottom: 1px solid #eee7df;
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 1000;
+}
+
+
+.navbar {
+    min-height: 78px;
+}
+
+
+.logo-wrapper {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.logo-icon {
+    width: 42px;
+
+    height: 42px;
+
+    border-radius: 10px;
+
+    background: #8b5e3c;
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 18px;
+}
+
+
+.logo-name {
+    font-family: "Playfair Display", serif;
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+    color: #3c2b20;
+
+    line-height: 1;
+}
+
+
+.logo-tagline {
+    font-size: 8px;
+
+    letter-spacing: 1.5px;
+
+    color: #9b7a5d;
+
+    margin-top: 4px;
+}
+
+
+/* =====================================
+   NAVIGATION
+===================================== */
+
+.nav-link {
+    color: #4a4038 !important;
+
+    font-weight: 500;
+
+    margin: 0 7px;
+
+    transition: 0.3s;
+}
+
+
+.nav-link:hover {
+    color: #8b5e3c !important;
+}
+
+
+/* =====================================
+   BUTTON
+===================================== */
+
+.btn-primary-custom {
+    background: #8b5e3c;
+
+    color: #ffffff;
+
+    border: none;
+
+    padding: 11px 20px;
+
+    border-radius: 7px;
+
+    font-weight: 600;
+
+    transition: 0.3s;
+}
+
+
+.btn-primary-custom:hover {
+    background: #6f482d;
+
+    color: #ffffff;
+
+    transform: translateY(-1px);
+}
+
+
+/* =====================================
+   FOOTER
+===================================== */
+
+.site-footer {
+    background: #2c241f;
+
+    color: #d7cec6;
+
+    padding: 70px 0 20px;
+
+    margin-top: 70px;
+}
+
+
+.footer-title {
+    font-family: "Playfair Display", serif;
+
+    color: #ffffff;
+
+    margin-bottom: 18px;
+}
+
+
+.footer-heading {
+    color: #ffffff;
+
+    margin-bottom: 20px;
+}
+
+
+.footer-links {
+    padding: 0;
+
+    margin: 0;
+
+    list-style: none;
+}
+
+
+.footer-links li {
+    margin-bottom: 10px;
+}
+
+
+.footer-links a {
+    color: #cfc4ba;
+
+    text-decoration: none;
+
+    transition: 0.3s;
+}
+
+
+.footer-links a:hover {
+    color: #ffffff;
+
+    padding-left: 4px;
+}
+
+
+.social-links {
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 20px;
+}
+
+
+.social-links a {
+    width: 38px;
+
+    height: 38px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #40352d;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    transition: 0.3s;
+}
+
+
+.social-links a:hover {
+    background: #8b5e3c;
+
+    transform: translateY(-3px);
+}
+
+
+.footer-bottom {
+    text-align: center;
+
+    padding-top: 20px;
+}
+
+
+/* =====================================
+   CHAT BUTTON
+===================================== */
+
+.chat-button {
+    position: fixed;
+
+    right: 25px;
+
+    bottom: 25px;
+
+    background: #8b5e3c;
+
+    color: white;
+
+    padding: 13px 18px;
+
+    border-radius: 30px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    cursor: pointer;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+
+    z-index: 999;
+
+    font-weight: 600;
+
+    transition: 0.3s;
+}
+
+
+.chat-button:hover {
+    transform: translateY(-3px);
+
+    background: #6f482d;
+}
+
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media (max-width: 991px) {
+
+    .navbar-nav {
+        padding: 20px 0;
+    }
+
+    .nav-link {
+        margin: 7px 0;
+    }
+
+}
+
+
+@media (max-width: 576px) {
+
+    .logo-name {
+        font-size: 17px;
+    }
+
+    .chat-button span {
+        display: none;
+    }
+
+    .chat-button {
+        width: 52px;
+
+        height: 52px;
+
+        padding: 0;
+
+        justify-content: center;
+    }
+
+}

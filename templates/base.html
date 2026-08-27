@@ -1,0 +1,1231 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="Find premium lands, villas, resorts, plots and properties with us.">
+
+    <title>
+        {% block title %}
+        Premium Properties
+        {% endblock %}
+    </title>
+
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- Main CSS -->
+    <link
+        rel="stylesheet"
+        href="{% static 'css/style.css' %}"
+    >
+
+
+    <!-- Page Specific CSS -->
+    {% block extra_css %}
+    {% endblock %}
+
+
+    <!-- EMAIL POPUP CSS -->
+    <style>
+
+        /* =====================================
+           EMAIL POPUP OVERLAY
+        ===================================== */
+
+        #emailPopup {
+            position: fixed !important;
+
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+
+            width: 100vw !important;
+            height: 100vh !important;
+
+            background: rgba(0, 0, 0, 0.55) !important;
+
+            display: flex !important;
+
+            align-items: center !important;
+            justify-content: center !important;
+
+            z-index: 2147483647 !important;
+
+            visibility: hidden !important;
+            opacity: 0 !important;
+
+            pointer-events: none !important;
+
+            transition: opacity 0.3s ease !important;
+        }
+
+
+        /* SHOW POPUP */
+
+        #emailPopup.show {
+            visibility: visible !important;
+
+            opacity: 1 !important;
+
+            pointer-events: auto !important;
+        }
+
+
+        /* =====================================
+           POPUP BOX
+        ===================================== */
+
+        #emailPopup .email-popup-content {
+
+            width: 420px !important;
+
+            max-width: calc(100vw - 30px) !important;
+
+            background: #ffffff !important;
+
+            padding: 40px 30px !important;
+
+            border-radius: 15px !important;
+
+            box-shadow:
+                0 15px 60px
+                rgba(0, 0, 0, 0.35) !important;
+
+            position: relative !important;
+
+            text-align: center !important;
+
+            box-sizing: border-box !important;
+
+            transform: translateY(20px);
+
+            transition: transform 0.3s ease;
+        }
+
+
+        /* POPUP ANIMATION */
+
+        #emailPopup.show .email-popup-content {
+
+            transform: translateY(0);
+
+        }
+
+
+        /* =====================================
+           CLOSE BUTTON
+        ===================================== */
+
+        #emailPopup .email-popup-close {
+
+            position: absolute !important;
+
+            top: 8px !important;
+
+            right: 12px !important;
+
+            width: 40px !important;
+
+            height: 40px !important;
+
+            border: none !important;
+
+            background: transparent !important;
+
+            font-size: 30px !important;
+
+            line-height: 40px !important;
+
+            color: #555 !important;
+
+            cursor: pointer !important;
+
+            z-index: 10 !important;
+
+        }
+
+
+        #emailPopup .email-popup-close:hover {
+
+            color: #000 !important;
+
+        }
+
+
+        /* =====================================
+           ICON
+        ===================================== */
+
+        #emailPopup .email-popup-icon {
+
+            width: 70px !important;
+
+            height: 70px !important;
+
+            margin: 0 auto 20px !important;
+
+            border-radius: 50% !important;
+
+            background: #8b4513 !important;
+
+            color: white !important;
+
+            display: flex !important;
+
+            align-items: center !important;
+
+            justify-content: center !important;
+
+            font-size: 28px !important;
+
+        }
+
+
+        /* =====================================
+           TITLE
+        ===================================== */
+
+        #emailPopup h3 {
+
+            font-family: 'Playfair Display', serif !important;
+
+            font-size: 28px !important;
+
+            color: #3b2416 !important;
+
+            margin: 0 0 12px 0 !important;
+
+        }
+
+
+        /* =====================================
+           DESCRIPTION
+        ===================================== */
+
+        #emailPopup p {
+
+            color: #666 !important;
+
+            font-size: 15px !important;
+
+            line-height: 1.6 !important;
+
+            margin: 0 0 25px 0 !important;
+
+        }
+
+
+        /* =====================================
+           INPUT
+        ===================================== */
+
+        #emailPopup input {
+
+            width: 100% !important;
+
+            padding: 14px 15px !important;
+
+            border: 1px solid #ddd !important;
+
+            border-radius: 8px !important;
+
+            outline: none !important;
+
+            font-size: 15px !important;
+
+            margin-bottom: 12px !important;
+
+            box-sizing: border-box !important;
+
+        }
+
+
+        #emailPopup input:focus {
+
+            border-color: #8b4513 !important;
+
+        }
+
+
+        /* =====================================
+           SUBMIT BUTTON
+        ===================================== */
+
+        #emailPopup button[type="submit"] {
+
+            width: 100% !important;
+
+            padding: 14px !important;
+
+            border: none !important;
+
+            border-radius: 8px !important;
+
+            background: #e89e69 !important;
+
+            color: white !important;
+
+            font-size: 16px !important;
+
+            font-weight: 600 !important;
+
+            cursor: pointer !important;
+
+        }
+
+
+        #emailPopup button[type="submit"]:hover {
+
+            background: #d47d47 !important;
+
+        }
+
+
+        #emailPopup button[type="submit"]:disabled {
+
+            opacity: 0.7 !important;
+
+            cursor: not-allowed !important;
+
+        }
+
+
+        /* =====================================
+           MESSAGE
+        ===================================== */
+
+        #emailPopupMessage {
+
+            margin-top: 10px !important;
+
+            font-size: 13px !important;
+
+        }
+
+
+        /* =====================================
+           PRIVACY TEXT
+        ===================================== */
+
+        #emailPopup small {
+
+            display: block !important;
+
+            margin-top: 15px !important;
+
+            color: #999 !important;
+
+            font-size: 12px !important;
+
+        }
+
+
+        /* =====================================
+           MOBILE
+        ===================================== */
+
+        @media (max-width: 576px) {
+
+            #emailPopup {
+
+                padding: 15px !important;
+
+                box-sizing: border-box !important;
+
+            }
+
+
+            #emailPopup .email-popup-content {
+
+                width: 100% !important;
+
+                max-width: 420px !important;
+
+                padding: 35px 20px !important;
+
+                margin: 0 !important;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================
+     HEADER
+===================================== -->
+
+<header class="site-header">
+
+    <nav class="navbar navbar-expand-lg">
+
+        <div class="container">
+
+
+            <!-- LOGO -->
+
+            <a
+                class="navbar-brand"
+                href="/"
+            >
+
+                <div class="logo-wrapper">
+
+                    <div class="logo-icon">
+
+                        <i class="fa-solid fa-building"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="logo-name">
+                            PRIME ESTATES
+                        </div>
+
+                        <div class="logo-tagline">
+                            LAND • HOMES • INVESTMENTS
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+
+            <!-- MOBILE MENU BUTTON -->
+
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#mainNavbar"
+                aria-controls="mainNavbar"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+            >
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+
+            <!-- NAVIGATION -->
+
+            <div
+                class="collapse navbar-collapse"
+                id="mainNavbar"
+            >
+
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+
+
+                    <li class="nav-item">
+
+                        <a
+                            class="nav-link"
+                            href="/"
+                        >
+                            Home
+                        </a>
+
+                    </li>
+
+
+                    <li class="nav-item">
+
+                        <a
+                            class="nav-link"
+                            href="/properties/"
+                        >
+                            Properties
+                        </a>
+
+                    </li>
+
+
+                    <li class="nav-item">
+
+                        <a
+                            class="nav-link"
+                            href="/about/"
+                        >
+                            About Us
+                        </a>
+
+                    </li>
+
+
+                    <li class="nav-item ms-lg-3">
+
+                        <a
+                            href="/contact/"
+                            class="btn btn-primary-custom"
+                        >
+
+                            <i class="fa-solid fa-phone"></i>
+
+                            Enquire Now
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+</header>
+
+
+<!-- =====================================
+     MAIN CONTENT
+===================================== -->
+
+<main>
+
+    {% block content %}
+    {% endblock %}
+
+</main>
+
+
+<!-- =====================================
+     CHAT BUTTON
+===================================== -->
+
+<div
+    class="chat-button"
+    id="chatButton"
+>
+
+    <i class="fa-solid fa-comments"></i>
+
+    <a href="{% url 'chat' %}" style="color: white">
+        Chat With Us
+    </a>
+
+</div>
+
+
+<!-- =====================================
+     FOOTER
+===================================== -->
+
+<footer class="site-footer">
+
+    <div class="container">
+
+        <div class="row g-4">
+
+
+            <!-- COMPANY -->
+
+            <div class="col-lg-4">
+
+                <h4 class="footer-title">
+                    PRIME ESTATES
+                </h4>
+
+                <p>
+                    Discover premium lands, villas,
+                    resorts and investment opportunities
+                    in the best locations.
+                </p>
+
+
+                <div class="social-links">
+
+                    <a href="#">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+
+                    <a href="#">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+
+                    <a href="#">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+
+                    <a href="#">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- QUICK LINKS -->
+
+            <div class="col-lg-2 col-md-4">
+
+                <h5 class="footer-heading">
+                    Quick Links
+                </h5>
+
+                <ul class="footer-links">
+
+                    <li>
+                        <a href="/">
+                            Home
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/properties/">
+                            Properties
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/about/">
+                            About Us
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/contact/">
+                            Contact
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <!-- PROPERTY -->
+
+            <div class="col-lg-3 col-md-4">
+
+                <h5 class="footer-heading">
+                    Properties
+                </h5>
+
+                <ul class="footer-links">
+
+                    <li>
+                        <a href="/properties/?type=land">
+                            Lands
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/properties/?type=villa">
+                            Villas
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/properties/?type=resort">
+                            Resorts
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/properties/">
+                            Commercial
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <!-- CONTACT -->
+
+            <div class="col-lg-3 col-md-4">
+
+                <h5 class="footer-heading">
+                    Contact Us
+                </h5>
+
+                <p>
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    Hyderabad, Telangana, India
+
+                </p>
+
+                <p>
+
+                    <i class="fa-solid fa-phone"></i>
+
+                    +91 98765 43210
+
+                </p>
+
+                <p>
+
+                    <i class="fa-solid fa-envelope"></i>
+
+                    info@primeestates.com
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <hr>
+
+
+        <div class="footer-bottom">
+
+            <p>
+                © 2026 Prime Estates.
+                All Rights Reserved.
+            </p>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<!-- =====================================
+     EMAIL POPUP
+===================================== -->
+
+<div
+    id="emailPopup"
+    aria-hidden="true"
+>
+
+    <div class="email-popup-content">
+
+
+        <!-- CLOSE -->
+
+        <button
+            type="button"
+            class="email-popup-close"
+            id="emailPopupClose"
+            aria-label="Close"
+        >
+            &times;
+        </button>
+
+
+        <!-- ICON -->
+
+        <div class="email-popup-icon">
+
+            <i class="fa-solid fa-envelope"></i>
+
+        </div>
+
+
+        <!-- TITLE -->
+
+        <h3>
+            Stay Connected
+        </h3>
+
+
+        <!-- DESCRIPTION -->
+
+        <p>
+            Get the latest property updates,
+            premium listings and investment opportunities.
+        </p>
+
+
+        <!-- FORM -->
+
+        <form id="emailPopupForm">
+
+            {% csrf_token %}
+
+
+            <input
+                type="email"
+                id="visitorEmail"
+                name="email"
+                placeholder="Enter your email"
+                autocomplete="email"
+                required
+            >
+
+
+            <button
+                type="submit"
+                id="emailContinueBtn"
+            >
+
+                Continue
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </button>
+
+        </form>
+
+
+        <!-- MESSAGE -->
+
+        <div id="emailPopupMessage"></div>
+
+
+        <!-- PRIVACY -->
+
+        <small>
+            We respect your privacy.
+        </small>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================
+     BOOTSTRAP JS
+===================================== -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+<!-- =====================================
+     MAIN JS
+===================================== -->
+
+<script
+    src="{% static 'js/main.js' %}">
+</script>
+
+
+<!-- =====================================
+     EMAIL POPUP JS
+===================================== -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    console.log("=================================");
+    console.log("EMAIL POPUP JS STARTED");
+    console.log("=================================");
+
+
+    const popup =
+        document.getElementById("emailPopup");
+
+
+    const closeButton =
+        document.getElementById("emailPopupClose");
+
+
+    const form =
+        document.getElementById("emailPopupForm");
+
+
+    const emailInput =
+        document.getElementById("visitorEmail");
+
+
+    const message =
+        document.getElementById("emailPopupMessage");
+
+
+    const continueButton =
+        document.getElementById("emailContinueBtn");
+
+
+    /* =====================================
+       CHECK POPUP
+    ===================================== */
+
+    if (!popup) {
+
+        console.error(
+            "ERROR: emailPopup element not found"
+        );
+
+        return;
+
+    }
+
+
+    console.log(
+        "Email popup element found"
+    );
+
+
+    /* =====================================
+       CHECK LOCAL STORAGE
+    ===================================== */
+
+    const alreadySubmitted =
+        localStorage.getItem(
+            "visitorEmailSubmitted"
+        );
+
+
+    console.log(
+        "Already submitted:",
+        alreadySubmitted
+    );
+
+
+    /*
+     * If visitor already submitted,
+     * don't show popup.
+     */
+
+    if (alreadySubmitted === "true") {
+
+        console.log(
+            "Popup disabled because email was already submitted"
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================
+       SHOW AFTER 5 SECONDS
+    ===================================== */
+
+    console.log(
+        "Popup will appear after 5 seconds..."
+    );
+
+
+    setTimeout(function () {
+
+        console.log(
+            "5 SECONDS COMPLETED"
+        );
+
+
+        /*
+         * Check again before showing.
+         */
+
+        if (
+            localStorage.getItem(
+                "visitorEmailSubmitted"
+            ) !== "true"
+        ) {
+
+            popup.classList.add("show");
+
+            popup.setAttribute(
+                "aria-hidden",
+                "false"
+            );
+
+
+            console.log(
+                "EMAIL POPUP IS NOW VISIBLE"
+            );
+
+        }
+
+    }, 5000);
+
+
+    /* =====================================
+       CLOSE POPUP
+    ===================================== */
+
+    if (closeButton) {
+
+        closeButton.addEventListener(
+            "click",
+            function () {
+
+                console.log(
+                    "Email popup closed"
+                );
+
+
+                popup.classList.remove(
+                    "show"
+                );
+
+
+                popup.setAttribute(
+                    "aria-hidden",
+                    "true"
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================
+       CLICK OUTSIDE POPUP TO CLOSE
+    ===================================== */
+
+    popup.addEventListener(
+        "click",
+        function (event) {
+
+            if (event.target === popup) {
+
+                popup.classList.remove(
+                    "show"
+                );
+
+
+                popup.setAttribute(
+                    "aria-hidden",
+                    "true"
+                );
+
+            }
+
+        }
+    );
+
+
+    /* =====================================
+       FORM SUBMIT
+    ===================================== */
+
+    if (form) {
+
+        form.addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+
+
+                const email =
+                    emailInput.value.trim();
+
+
+                if (!email) {
+
+                    return;
+
+                }
+
+
+                continueButton.disabled =
+                    true;
+
+
+                continueButton.innerHTML =
+                    "Saving...";
+
+
+                const csrfElement =
+                    document.querySelector(
+                        "#emailPopupForm [name='csrfmiddlewaretoken']"
+                    );
+
+
+                if (!csrfElement) {
+
+                    console.error(
+                        "CSRF token not found"
+                    );
+
+
+                    message.textContent =
+                        "Security token missing. Please refresh the page.";
+
+
+                    continueButton.disabled =
+                        false;
+
+
+                    continueButton.innerHTML =
+                        'Continue <i class="fa-solid fa-arrow-right"></i>';
+
+
+                    return;
+
+                }
+
+
+                const csrfToken =
+                    csrfElement.value;
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/enquiries/save-visitor-email/",
+                            {
+
+                                method: "POST",
+
+                                headers: {
+
+                                    "X-CSRFToken":
+                                        csrfToken,
+
+                                    "Content-Type":
+                                        "application/x-www-form-urlencoded"
+
+                                },
+
+                                body:
+                                    "email=" +
+                                    encodeURIComponent(
+                                        email
+                                    )
+
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    console.log(
+                        "Email API response:",
+                        data
+                    );
+
+
+                    if (data.success) {
+
+
+                        /*
+                         * Remember visitor
+                         */
+
+                        localStorage.setItem(
+                            "visitorEmailSubmitted",
+                            "true"
+                        );
+
+
+                        message.textContent =
+                            "Thank you!";
+
+
+                        /*
+                         * Close popup
+                         */
+
+                        setTimeout(
+                            function () {
+
+                                popup.classList.remove(
+                                    "show"
+                                );
+
+
+                                popup.setAttribute(
+                                    "aria-hidden",
+                                    "true"
+                                );
+
+                            },
+                            800
+                        );
+
+
+                    } else {
+
+
+                        message.textContent =
+                            data.message ||
+                            "Unable to save email.";
+
+
+                        continueButton.disabled =
+                            false;
+
+
+                        continueButton.innerHTML =
+                            'Continue <i class="fa-solid fa-arrow-right"></i>';
+
+                    }
+
+
+                } catch (error) {
+
+
+                    console.error(
+                        "Email save error:",
+                        error
+                    );
+
+
+                    message.textContent =
+                        "Something went wrong. Please try again.";
+
+
+                    continueButton.disabled =
+                        false;
+
+
+                    continueButton.innerHTML =
+                        'Continue <i class="fa-solid fa-arrow-right"></i>';
+
+                }
+
+            }
+        );
+
+    }
+
+});
+
+</script>
+
+
+</body>
+
+</html>

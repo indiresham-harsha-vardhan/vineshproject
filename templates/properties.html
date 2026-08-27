@@ -1,0 +1,959 @@
+{% extends "base.html" %}
+
+{% block title %}
+Properties | Prime Estates
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+.properties-page {
+
+    padding: 70px 0 100px;
+
+    background: #faf8f5;
+
+}
+
+
+/* HEADER */
+
+.properties-header {
+
+    margin-bottom: 40px;
+
+}
+
+
+.page-label {
+
+    color: #8b5e3c;
+
+    letter-spacing: 2px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+
+.properties-header h1 {
+
+    font-family:
+        "Playfair Display",
+        serif;
+
+    font-size:
+        clamp(38px, 5vw, 55px);
+
+    margin: 12px 0;
+
+}
+
+
+.properties-header p {
+
+    color: #777;
+
+}
+
+
+/* FILTER */
+
+.property-filter {
+
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 15px;
+
+    border:
+        1px solid #eee6de;
+
+    margin-bottom: 40px;
+
+}
+
+
+.property-filter form {
+
+    display: grid;
+
+    grid-template-columns:
+        1.5fr
+        1fr
+        1.2fr
+        1fr
+        1fr
+        auto;
+
+    gap: 15px;
+
+    align-items: end;
+
+}
+
+
+.filter-field {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+}
+
+
+.filter-field label {
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    color: #555;
+
+}
+
+
+.filter-field input,
+.filter-field select {
+
+    width: 100%;
+
+    height: 45px;
+
+    border:
+        1px solid #ddd;
+
+    border-radius: 7px;
+
+    padding: 0 12px;
+
+    outline: none;
+
+    background: white;
+
+}
+
+
+.filter-field input:focus,
+.filter-field select:focus {
+
+    border-color: #8b5e3c;
+
+}
+
+
+.filter-buttons {
+
+    display: flex;
+
+    gap: 8px;
+
+}
+
+
+.filter-search {
+
+    height: 45px;
+
+    border: none;
+
+    padding: 0 18px;
+
+    background: #8b5e3c;
+
+    color: white;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+
+}
+
+
+.filter-reset {
+
+    height: 45px;
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 0 15px;
+
+    border:
+        1px solid #ddd;
+
+    border-radius: 7px;
+
+    text-decoration: none;
+
+    color: #666;
+
+}
+
+
+/* RESULTS */
+
+.property-results-header {
+
+    margin-bottom: 25px;
+
+    color: #777;
+
+}
+
+
+.property-results-header strong {
+
+    color: #332820;
+
+}
+
+
+/* CARD */
+
+.property-card {
+
+    background: white;
+
+    border:
+        1px solid #eee6de;
+
+    border-radius: 15px;
+
+    overflow: hidden;
+
+    height: 100%;
+
+    transition:
+        transform .3s,
+        box-shadow .3s;
+
+}
+
+
+.property-card:hover {
+
+    transform:
+        translateY(-6px);
+
+    box-shadow:
+        0 20px 45px
+        rgba(50,35,25,.12);
+
+}
+
+
+/* IMAGE */
+
+.property-card-image {
+
+    height: 260px;
+
+    position: relative;
+
+    overflow: hidden;
+
+}
+
+
+.property-card-image img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    transition: .5s;
+
+}
+
+
+.property-card:hover
+.property-card-image img {
+
+    transform: scale(1.06);
+
+}
+
+
+.property-no-image {
+
+    width: 100%;
+
+    height: 100%;
+
+    background: #eee7df;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #8b5e3c;
+
+    font-size: 55px;
+
+}
+
+
+/* BADGES */
+
+.property-type-badge {
+
+    position: absolute;
+
+    top: 15px;
+
+    left: 15px;
+
+    background: #8b5e3c;
+
+    color: white;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+}
+
+
+.property-status-badge {
+
+    position: absolute;
+
+    top: 15px;
+
+    right: 15px;
+
+    background: white;
+
+    color: #8b5e3c;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+}
+
+
+/* CONTENT */
+
+.property-card-content {
+
+    padding: 22px;
+
+}
+
+
+.property-card-content h2 {
+
+    font-family:
+        "Playfair Display",
+        serif;
+
+    font-size: 23px;
+
+    margin-bottom: 8px;
+
+}
+
+
+.property-location {
+
+    color: #777;
+
+    font-size: 13px;
+
+}
+
+
+.property-location i {
+
+    color: #8b5e3c;
+
+}
+
+
+/* FEATURES */
+
+.property-features {
+
+    display: flex;
+
+    gap: 20px;
+
+    border-top:
+        1px solid #eee;
+
+    border-bottom:
+        1px solid #eee;
+
+    padding: 14px 0;
+
+    margin: 18px 0;
+
+}
+
+
+.property-features span {
+
+    color: #666;
+
+    font-size: 12px;
+
+}
+
+
+.property-features i {
+
+    color: #8b5e3c;
+
+}
+
+
+/* FOOTER */
+
+.property-card-footer {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items: center;
+
+    gap: 10px;
+
+}
+
+
+.property-price {
+
+    color: #8b5e3c;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+}
+
+
+.property-view {
+
+    text-decoration: none;
+
+    color: #8b5e3c;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+}
+
+
+/* EMPTY */
+
+.no-properties {
+
+    text-align: center;
+
+    padding: 80px 20px;
+
+}
+
+
+.no-properties i {
+
+    font-size: 50px;
+
+    color: #8b5e3c;
+
+}
+
+
+.no-properties h2 {
+
+    font-family:
+        "Playfair Display",
+        serif;
+
+}
+
+
+.no-properties p {
+
+    color: #777;
+
+}
+
+
+.no-properties a {
+
+    display: inline-block;
+
+    background: #8b5e3c;
+
+    color: white;
+
+    padding: 12px 20px;
+
+    border-radius: 7px;
+
+    text-decoration: none;
+
+}
+
+
+/* RESPONSIVE */
+
+@media(max-width:1100px) {
+
+    .property-filter form {
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
+    }
+
+}
+
+
+@media(max-width:700px) {
+
+    .property-filter form {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .filter-buttons {
+
+        width: 100%;
+
+    }
+
+
+    .filter-search,
+    .filter-reset {
+
+        flex: 1;
+
+        justify-content: center;
+
+    }
+
+}
+
+</style>
+
+{% endblock %}
+{% block content %}
+
+<section class="properties-page">
+
+    <div class="container">
+
+
+        <!-- PAGE HEADER -->
+
+        <div class="properties-header">
+
+            <div>
+
+                <span class="page-label">
+                    OUR PROPERTIES
+                </span>
+
+                <h1>
+                    Find Your Perfect Property
+                </h1>
+
+                <p>
+                    Explore lands, villas, resorts,
+                    plots and other real estate
+                    opportunities.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- FILTER -->
+
+        <div class="property-filter">
+
+            <form
+                method="GET"
+                action="{% url 'property_list' %}"
+            >
+
+
+                <!-- SEARCH -->
+
+                <div class="filter-field search-field">
+
+                    <label>
+                        Search
+                    </label>
+
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ search }}"
+                        placeholder="Search property..."
+                    >
+
+                </div>
+
+
+                <!-- TYPE -->
+
+                <div class="filter-field">
+
+                    <label>
+                        Property Type
+                    </label>
+
+                    <select name="type">
+
+                        <option value="">
+                            All Types
+                        </option>
+
+
+                        {% for type in property_types %}
+
+                        <option
+                            value="{{ type.slug }}"
+                            {% if selected_type == type.slug %}
+                                selected
+                            {% endif %}
+                        >
+
+                            {{ type.name }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- LOCATION -->
+
+                <div class="filter-field">
+
+                    <label>
+                        Location
+                    </label>
+
+                    <input
+                        type="text"
+                        name="location"
+                        value="{{ location }}"
+                        placeholder="City or location"
+                    >
+
+                </div>
+
+
+                <!-- MIN PRICE -->
+
+                <div class="filter-field">
+
+                    <label>
+                        Min Price
+                    </label>
+
+                    <input
+                        type="number"
+                        name="min_price"
+                        value="{{ min_price }}"
+                        placeholder="₹ Minimum"
+                    >
+
+                </div>
+
+
+                <!-- MAX PRICE -->
+
+                <div class="filter-field">
+
+                    <label>
+                        Max Price
+                    </label>
+
+                    <input
+                        type="number"
+                        name="max_price"
+                        value="{{ max_price }}"
+                        placeholder="₹ Maximum"
+                    >
+
+                </div>
+
+
+                <div class="filter-buttons">
+
+                    <button
+                        type="submit"
+                        class="filter-search"
+                    >
+
+                        <i class="fa-solid fa-search"></i>
+
+                        Search
+
+                    </button>
+
+
+                    <a
+                        href="{% url 'property_list' %}"
+                        class="filter-reset"
+                    >
+
+                        Reset
+
+                    </a>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+
+        <!-- RESULTS -->
+
+        <div class="property-results-header">
+
+            <div>
+
+                <strong>
+                    {{ properties|length }}
+                </strong>
+
+                Properties Found
+
+            </div>
+
+        </div>
+
+
+        <!-- PROPERTY GRID -->
+
+        <div class="row g-4">
+
+
+            {% for property in properties %}
+
+            <div class="col-xl-4 col-lg-4 col-md-6">
+
+                <div class="property-card">
+
+
+                    <!-- IMAGE -->
+
+                    <div class="property-card-image">
+
+                        {% with property.images.all|first as image %}
+
+                            {% if image %}
+
+                            <img
+                                src="{{ image.image.url }}"
+                                alt="{{ property.title }}"
+                            >
+
+                            {% else %}
+
+                            <div class="property-no-image">
+
+                                <i class="fa-solid fa-building"></i>
+
+                            </div>
+
+                            {% endif %}
+
+                        {% endwith %}
+
+
+                        <span class="property-type-badge">
+
+                            {{ property.property_type.name }}
+
+                        </span>
+
+
+                        <span class="property-status-badge">
+
+                            {{ property.get_status_display }}
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- CONTENT -->
+
+                    <div class="property-card-content">
+
+
+                        <h2>
+
+                            {{ property.title }}
+
+                        </h2>
+
+
+                        <p class="property-location">
+
+                            <i class="fa-solid fa-location-dot"></i>
+
+                            {{ property.location }}
+
+                            {% if property.city %}
+
+                                , {{ property.city }}
+
+                            {% endif %}
+
+                        </p>
+
+
+                        <div class="property-features">
+
+
+                            {% if property.area_sqft %}
+
+                            <span>
+
+                                <i class="fa-solid fa-ruler-combined"></i>
+
+                                {{ property.area_sqft }}
+                                Sq.Ft
+
+                            </span>
+
+                            {% endif %}
+
+
+                            {% if property.bedrooms %}
+
+                            <span>
+
+                                <i class="fa-solid fa-bed"></i>
+
+                                {{ property.bedrooms }}
+                                Beds
+
+                            </span>
+
+                            {% endif %}
+
+
+                        </div>
+
+
+                        <div class="property-card-footer">
+
+
+                            <div class="property-price">
+
+                                {% if property.price %}
+
+                                    ₹ {{ property.price|floatformat:0 }}
+
+                                {% else %}
+
+                                    Price on Request
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <a
+                                href="{% url 'property_detail' property.slug %}"
+                                class="property-view"
+                            >
+
+                                View Details
+
+                                <i class="fa-solid fa-arrow-right"></i>
+
+                            </a>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            {% empty %}
+
+            <div class="col-12">
+
+                <div class="no-properties">
+
+                    <i class="fa-solid fa-house-circle-exclamation"></i>
+
+                    <h2>
+                        No Properties Found
+                    </h2>
+
+                    <p>
+                        Try changing your search
+                        or filter options.
+                    </p>
+
+
+                    <a
+                        href="{% url 'property_list' %}"
+                    >
+
+                        View All Properties
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+
+        </div>
+
+
+    </div>
+
+</section>
+
+{% endblock %}

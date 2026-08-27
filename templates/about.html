@@ -1,0 +1,604 @@
+{% extends "base.html" %}
+
+{% block title %}
+About Us | {{ about.company_name }}
+{% endblock %}
+
+
+{% block content %}
+
+<section class="about-page">
+
+    <div class="container">
+
+
+        <!-- HERO -->
+
+        <div class="about-hero">
+
+            <span>
+                ABOUT US
+            </span>
+
+            <h1>
+                {{ about.heading }}
+            </h1>
+
+            <p>
+                {{ about.tagline }}
+            </p>
+
+        </div>
+
+
+        <!-- ABOUT COMPANY -->
+
+        <div class="row align-items-center g-5 about-main">
+
+
+            <div class="col-lg-6">
+
+                {% if about.image %}
+
+                    <img
+                        src="{{ about.image.url }}"
+                        alt="{{ about.company_name }}"
+                        class="about-image"
+                    >
+
+                {% else %}
+
+                    <div class="about-image-placeholder">
+
+                        <i class="fa-solid fa-building"></i>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="col-lg-6">
+
+                <span class="section-label">
+                    WHO WE ARE
+                </span>
+
+                <h2>
+                    {{ about.company_name }}
+                </h2>
+
+                <div class="about-description">
+
+                    {{ about.description|linebreaks }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- STATS -->
+
+        <div class="about-stats">
+
+
+            {% if about.experience %}
+
+            <div class="about-stat">
+
+                <i class="fa-solid fa-calendar-check"></i>
+
+                <strong>
+                    {{ about.experience }}
+                </strong>
+
+                <span>
+                    Experience
+                </span>
+
+            </div>
+
+            {% endif %}
+
+
+            {% if about.properties_count %}
+
+            <div class="about-stat">
+
+                <i class="fa-solid fa-building"></i>
+
+                <strong>
+                    {{ about.properties_count }}
+                </strong>
+
+                <span>
+                    Properties
+                </span>
+
+            </div>
+
+            {% endif %}
+
+
+            {% if about.happy_clients %}
+
+            <div class="about-stat">
+
+                <i class="fa-solid fa-users"></i>
+
+                <strong>
+                    {{ about.happy_clients }}
+                </strong>
+
+                <span>
+                    Happy Clients
+                </span>
+
+            </div>
+
+            {% endif %}
+
+
+        </div>
+
+
+        <!-- MISSION / VISION -->
+
+        <div class="row g-4 mission-section">
+
+
+            {% if about.mission %}
+
+            <div class="col-lg-6">
+
+                <div class="mission-card">
+
+                    <div class="mission-icon">
+
+                        <i class="fa-solid fa-bullseye"></i>
+
+                    </div>
+
+                    <h2>
+                        Our Mission
+                    </h2>
+
+                    <p>
+                        {{ about.mission }}
+                    </p>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+
+            {% if about.vision %}
+
+            <div class="col-lg-6">
+
+                <div class="mission-card">
+
+                    <div class="mission-icon">
+
+                        <i class="fa-solid fa-eye"></i>
+
+                    </div>
+
+                    <h2>
+                        Our Vision
+                    </h2>
+
+                    <p>
+                        {{ about.vision }}
+                    </p>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+
+        </div>
+
+
+        <!-- CTA -->
+
+        <div class="about-cta">
+
+            <h2>
+                Looking for the Right Property?
+            </h2>
+
+            <p>
+                Explore our properties or talk to
+                our property experts today.
+            </p>
+
+            <div>
+
+                <a
+                    href="/properties/"
+                    class="cta-primary"
+                >
+                    Explore Properties
+                </a>
+
+                <a
+                    href="/contact/"
+                    class="cta-secondary"
+                >
+                    Contact Us
+                </a>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+.about-page {
+
+    padding: 70px 0 100px;
+
+}
+
+
+/* HERO */
+
+.about-hero {
+
+    text-align: center;
+
+    max-width: 800px;
+
+    margin: 0 auto 70px;
+
+}
+
+.about-hero span {
+
+    color: #8b5e3c;
+
+    letter-spacing: 2px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+.about-hero h1 {
+
+    font-family: "Playfair Display", serif;
+
+    font-size: clamp(40px, 5vw, 60px);
+
+    margin: 12px 0;
+
+}
+
+.about-hero p {
+
+    color: #777;
+
+    font-size: 17px;
+
+}
+
+
+/* MAIN */
+
+.about-main {
+
+    margin-bottom: 70px;
+
+}
+
+.about-image {
+
+    width: 100%;
+
+    height: 480px;
+
+    object-fit: cover;
+
+    border-radius: 18px;
+
+}
+
+.about-image-placeholder {
+
+    height: 480px;
+
+    border-radius: 18px;
+
+    background: #eee7df;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    color: #8b5e3c;
+
+    font-size: 80px;
+
+}
+
+.section-label {
+
+    color: #8b5e3c;
+
+    letter-spacing: 2px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+.about-main h2 {
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 40px;
+
+    margin: 15px 0 20px;
+
+}
+
+.about-description {
+
+    color: #666;
+
+    line-height: 1.9;
+
+}
+
+
+/* STATS */
+
+.about-stats {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    background: #332820;
+
+    color: white;
+
+    border-radius: 18px;
+
+    margin-bottom: 70px;
+
+    overflow: hidden;
+
+}
+
+.about-stat {
+
+    text-align: center;
+
+    padding: 35px 20px;
+
+    border-right: 1px solid
+        rgba(255,255,255,0.1);
+
+}
+
+.about-stat:last-child {
+
+    border-right: none;
+
+}
+
+.about-stat i {
+
+    display: block;
+
+    color: #c49a78;
+
+    font-size: 25px;
+
+    margin-bottom: 12px;
+
+}
+
+.about-stat strong {
+
+    display: block;
+
+    font-size: 30px;
+
+}
+
+.about-stat span {
+
+    color: #cfc4ba;
+
+    font-size: 13px;
+
+}
+
+
+/* MISSION */
+
+.mission-section {
+
+    margin-bottom: 70px;
+
+}
+
+.mission-card {
+
+    height: 100%;
+
+    background: white;
+
+    border: 1px solid #eee6de;
+
+    border-radius: 15px;
+
+    padding: 35px;
+
+}
+
+.mission-icon {
+
+    width: 55px;
+
+    height: 55px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #faf1e8;
+
+    color: #8b5e3c;
+
+    font-size: 22px;
+
+    margin-bottom: 20px;
+
+}
+
+.mission-card h2 {
+
+    font-family: "Playfair Display", serif;
+
+}
+
+.mission-card p {
+
+    color: #666;
+
+    line-height: 1.8;
+
+}
+
+
+/* CTA */
+
+.about-cta {
+
+    background: #f1e6db;
+
+    border-radius: 18px;
+
+    text-align: center;
+
+    padding: 55px 25px;
+
+}
+
+.about-cta h2 {
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 35px;
+
+}
+
+.about-cta p {
+
+    color: #666;
+
+    margin-bottom: 25px;
+
+}
+
+.cta-primary,
+.cta-secondary {
+
+    display: inline-block;
+
+    padding: 13px 25px;
+
+    border-radius: 7px;
+
+    text-decoration: none;
+
+    margin: 5px;
+
+    font-weight: 600;
+
+}
+
+.cta-primary {
+
+    background: #8b5e3c;
+
+    color: white;
+
+}
+
+.cta-secondary {
+
+    background: white;
+
+    color: #8b5e3c;
+
+}
+
+
+/* MOBILE */
+
+@media(max-width: 768px) {
+
+    .about-stats {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .about-stat {
+
+        border-right: none;
+
+        border-bottom: 1px solid
+            rgba(255,255,255,0.1);
+
+    }
+
+    .about-stat:last-child {
+
+        border-bottom: none;
+
+    }
+
+    .about-image,
+    .about-image-placeholder {
+
+        height: 350px;
+
+    }
+
+}
+
+</style>
+
+{% endblock %}

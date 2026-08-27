@@ -1,0 +1,797 @@
+{% extends "base.html" %}
+
+{% block title %}
+Properties | Prime Estates
+{% endblock %}
+
+
+{% block content %}
+
+<section class="properties-page">
+
+    <div class="container">
+
+
+        <!-- PAGE HEADER -->
+
+        <div class="properties-header">
+
+            <span>
+                OUR PROPERTIES
+            </span>
+
+            <h1>
+                Find Your Perfect Property
+            </h1>
+
+            <p>
+                Explore premium lands, villas,
+                resorts and investment properties.
+            </p>
+
+        </div>
+
+
+        <!-- SEARCH -->
+
+        <div class="property-search-box">
+
+            <form method="GET">
+
+                <div class="row g-3">
+
+
+                    <div class="col-lg-4">
+
+                        <label>
+                            Search
+                        </label>
+
+                        <input
+                            type="text"
+                            name="search"
+                            class="form-control"
+                            placeholder="Search property..."
+                            value="{{ request.GET.search }}"
+                        >
+
+                    </div>
+
+
+                    <div class="col-lg-3">
+
+                        <label>
+                            City
+                        </label>
+
+                        <input
+                            type="text"
+                            name="city"
+                            class="form-control"
+                            placeholder="Enter city"
+                            value="{{ request.GET.city }}"
+                        >
+
+                    </div>
+
+
+                    <div class="col-lg-2">
+
+                        <label>
+                            Min Price
+                        </label>
+
+                        <input
+                            type="number"
+                            name="min_price"
+                            class="form-control"
+                            placeholder="Min"
+                            value="{{ request.GET.min_price }}"
+                        >
+
+                    </div>
+
+
+                    <div class="col-lg-2">
+
+                        <label>
+                            Max Price
+                        </label>
+
+                        <input
+                            type="number"
+                            name="max_price"
+                            class="form-control"
+                            placeholder="Max"
+                            value="{{ request.GET.max_price }}"
+                        >
+
+                    </div>
+
+
+                    <div class="col-lg-1 d-flex align-items-end">
+
+                        <button
+                            type="submit"
+                            class="search-btn"
+                        >
+
+                            <i class="fa-solid fa-search"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <!-- RESULTS -->
+
+        <div class="results-header">
+
+            <h2>
+                Available Properties
+            </h2>
+
+            <span>
+                {{ properties|length }} Properties
+            </span>
+
+        </div>
+
+
+        <!-- PROPERTY GRID -->
+
+        <div class="row g-4">
+
+
+            {% for property in properties %}
+
+
+            <div class="col-lg-4 col-md-6">
+
+
+                <div class="property-card">
+
+
+                    <!-- IMAGE -->
+
+                    <div class="property-image">
+
+                        {% with property.images.all|first as image %}
+
+                            {% if image %}
+
+                                <img
+                                    src="{{ image.image.url }}"
+                                    alt="{{ property.title }}"
+                                >
+
+                            {% else %}
+
+                                <div class="no-image">
+
+                                    <i class="fa-solid fa-house"></i>
+
+                                    <span>
+                                        No Image
+                                    </span>
+
+                                </div>
+
+                            {% endif %}
+
+                        {% endwith %}
+
+
+                        <!-- STATUS -->
+
+                        <span class="property-status">
+
+                            {{ property.get_status_display }}
+
+                        </span>
+
+
+                        <!-- PROPERTY TYPE -->
+
+                        <span class="property-type">
+
+                            {{ property.property_type.name }}
+
+                        </span>
+
+
+                    </div>
+
+
+                    <!-- CONTENT -->
+
+                    <div class="property-content">
+
+
+                        <h3>
+
+                            {{ property.title }}
+
+                        </h3>
+
+
+                        <p class="property-location">
+
+                            <i class="fa-solid fa-location-dot"></i>
+
+                            {{ property.location }},
+                            {{ property.city }}
+
+                        </p>
+
+
+                        <div class="property-info">
+
+
+                            {% if property.area_sqft %}
+
+                            <span>
+
+                                <i class="fa-solid fa-ruler-combined"></i>
+
+                                {{ property.area_sqft }} Sq.Ft
+
+                            </span>
+
+                            {% endif %}
+
+
+                            {% if property.bedrooms %}
+
+                            <span>
+
+                                <i class="fa-solid fa-bed"></i>
+
+                                {{ property.bedrooms }} Beds
+
+                            </span>
+
+                            {% endif %}
+
+
+                            {% if property.bathrooms %}
+
+                            <span>
+
+                                <i class="fa-solid fa-bath"></i>
+
+                                {{ property.bathrooms }} Baths
+
+                            </span>
+
+                            {% endif %}
+
+
+                        </div>
+
+
+                        <div class="property-bottom">
+
+
+                            <div class="property-price">
+
+                                {% if property.price %}
+
+                                    ₹ {{ property.price|floatformat:0 }}
+
+                                {% else %}
+
+                                    Price on Request
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <a
+                                href="{% url 'property_detail' property.slug %}"
+                                class="view-property"
+                            >
+
+                                View Details
+
+                                <i class="fa-solid fa-arrow-right"></i>
+
+                            </a>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            {% empty %}
+
+
+            <div class="empty-properties">
+
+                <i class="fa-solid fa-house-circle-exclamation"></i>
+
+                <h3>
+                    No Properties Found
+                </h3>
+
+                <p>
+                    Try changing your search filters.
+                </p>
+
+            </div>
+
+
+            {% endfor %}
+
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+
+
+{% block extra_css %}
+
+<style>
+
+
+.properties-page {
+
+    padding: 70px 0;
+
+    min-height: 700px;
+
+}
+
+
+.properties-header {
+
+    text-align: center;
+
+    margin-bottom: 45px;
+
+}
+
+
+.properties-header span {
+
+    color: #8b5e3c;
+
+    letter-spacing: 2px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+
+.properties-header h1 {
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 48px;
+
+    margin: 12px 0;
+
+}
+
+
+.properties-header p {
+
+    color: #777;
+
+}
+
+
+/* SEARCH */
+
+.property-search-box {
+
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 15px;
+
+    border: 1px solid #eee6de;
+
+    margin-bottom: 50px;
+
+}
+
+
+.property-search-box label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-weight: 600;
+
+    font-size: 14px;
+
+}
+
+
+.property-search-box input {
+
+    height: 48px;
+
+    border: 1px solid #ddd;
+
+}
+
+
+.search-btn {
+
+    width: 100%;
+
+    height: 48px;
+
+    border: none;
+
+    background: #8b5e3c;
+
+    color: white;
+
+    border-radius: 6px;
+
+}
+
+
+/* RESULTS */
+
+.results-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+
+}
+
+
+.results-header h2 {
+
+    font-family: "Playfair Display", serif;
+
+    margin: 0;
+
+}
+
+
+.results-header span {
+
+    color: #777;
+
+}
+
+
+/* CARD */
+
+.property-card {
+
+    background: white;
+
+    border-radius: 15px;
+
+    overflow: hidden;
+
+    border: 1px solid #eee6de;
+
+    transition: 0.3s;
+
+    height: 100%;
+
+}
+
+
+.property-card:hover {
+
+    transform: translateY(-6px);
+
+    box-shadow:
+        0 20px 50px
+        rgba(70,45,30,0.12);
+
+}
+
+
+/* IMAGE */
+
+.property-image {
+
+    height: 260px;
+
+    position: relative;
+
+    overflow: hidden;
+
+}
+
+
+.property-image img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    transition: 0.5s;
+
+}
+
+
+.property-card:hover
+.property-image img {
+
+    transform: scale(1.05);
+
+}
+
+
+.no-image {
+
+    width: 100%;
+
+    height: 100%;
+
+    background: #eee7df;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #9b7a5d;
+
+    gap: 10px;
+
+}
+
+
+.no-image i {
+
+    font-size: 40px;
+
+}
+
+
+.property-status {
+
+    position: absolute;
+
+    top: 15px;
+
+    left: 15px;
+
+    background: #ffffff;
+
+    color: #8b5e3c;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+
+.property-type {
+
+    position: absolute;
+
+    top: 15px;
+
+    right: 15px;
+
+    background: #8b5e3c;
+
+    color: white;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+}
+
+
+/* CONTENT */
+
+.property-content {
+
+    padding: 25px;
+
+}
+
+
+.property-content h3 {
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 23px;
+
+    margin-bottom: 10px;
+
+}
+
+
+.property-location {
+
+    color: #777;
+
+    font-size: 14px;
+
+}
+
+
+.property-location i {
+
+    color: #8b5e3c;
+
+}
+
+
+.property-info {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 15px;
+
+    border-top: 1px solid #eee;
+
+    border-bottom: 1px solid #eee;
+
+    padding: 15px 0;
+
+    margin: 18px 0;
+
+}
+
+
+.property-info span {
+
+    font-size: 13px;
+
+    color: #666;
+
+}
+
+
+.property-info i {
+
+    color: #8b5e3c;
+
+}
+
+
+.property-bottom {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+}
+
+
+.property-price {
+
+    color: #8b5e3c;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+}
+
+
+.view-property {
+
+    color: #8b5e3c;
+
+    text-decoration: none;
+
+    font-weight: 600;
+
+    font-size: 14px;
+
+}
+
+
+.view-property:hover {
+
+    color: #5f3e28;
+
+}
+
+
+/* EMPTY */
+
+.empty-properties {
+
+    text-align: center;
+
+    padding: 80px 20px;
+
+    width: 100%;
+
+}
+
+
+.empty-properties i {
+
+    font-size: 50px;
+
+    color: #bca28e;
+
+}
+
+
+.empty-properties h3 {
+
+    font-family: "Playfair Display", serif;
+
+    margin-top: 20px;
+
+}
+
+
+@media(max-width: 768px) {
+
+    .properties-header h1 {
+
+        font-size: 38px;
+
+    }
+
+    .property-search-box {
+
+        padding: 18px;
+
+    }
+
+}
+
+</style>
+
+{% endblock %}
