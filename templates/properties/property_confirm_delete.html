@@ -1,0 +1,103 @@
+
+{% extends "base.html" %}
+
+{% block title %}
+Delete Property | V3 LAND VENTURES
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-12 col-md-8 col-lg-6">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body p-4 p-md-5 text-center">
+
+                    <div class="display-4 text-danger mb-3">
+
+                        <i class="bi bi-exclamation-triangle"></i>
+
+                    </div>
+
+
+                    <h2 class="fw-bold mb-3">
+
+                        Delete Property?
+
+                    </h2>
+
+
+                    <p class="text-muted">
+
+                        Are you sure you want to delete:
+
+                    </p>
+
+
+                    <h5 class="fw-bold">
+
+                        {{ property_obj.title }}
+
+                    </h5>
+
+
+                    <p class="text-muted">
+
+                        {{ property_obj.property_id }}
+
+                    </p>
+
+
+                    <div class="alert alert-warning">
+
+                        This action cannot be undone.
+
+                    </div>
+
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        <div class="d-flex
+                                    flex-column
+                                    flex-sm-row
+                                    justify-content-center
+                                    gap-2">
+
+                            <a
+                                href="{% url 'properties:property_manage' %}"
+                                class="btn btn-light px-4"
+                            >
+                                Cancel
+                            </a>
+
+
+                            <button
+                                type="submit"
+                                class="btn btn-danger px-4"
+                            >
+                                <i class="bi bi-trash me-2"></i>
+                                Delete Property
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

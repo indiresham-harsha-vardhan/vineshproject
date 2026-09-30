@@ -15,7 +15,7 @@
 
     <title>
         {% block title %}
-        Premium Properties
+        V3 LAND VENTURES
         {% endblock %}
     </title>
 
@@ -378,6 +378,181 @@
 
         }
 
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 576px) {
+
+    .chat-button {
+        right: 15px;
+        bottom: 25px;
+
+        padding: 13px 1px;
+
+        gap: 8px;
+
+        font-size: 10px;
+
+        border-radius: 10px;
+    }
+
+    .chat-button i {
+        font-size: 10px;
+    }
+}
+
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 375px) {
+
+    .chat-button {
+        right: 12px;
+        bottom: 12px;
+
+        padding: 11px 15px;
+
+        font-size: 13px;
+    }
+
+    .chat-button i {
+        font-size: 17px;
+    }
+}
+/* =========================================
+   PRIME ESTATES LOGO
+========================================= */
+
+.navbar-brand {
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+}
+
+.logo-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-icon {
+    width: 65px;
+    height: 65px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: transparent !important;
+    border: none !important;
+
+    overflow: hidden;
+}
+
+.logo-icon img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+    object-fit: contain;
+
+    background: transparent !important;
+}
+
+
+/* LOGO TEXT */
+
+.logo-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.1;
+
+    white-space: nowrap;
+}
+
+.logo-tagline {
+    margin-top: 4px;
+
+    font-family: 'DM Sans', sans-serif;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 991px) {
+
+    .logo-icon {
+        width: 55px;
+        height: 55px;
+    }
+
+    .logo-name {
+        font-size: 20px;
+    }
+
+    .logo-tagline {
+        font-size: 8px;
+        letter-spacing: 1px;
+    }
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 576px) {
+
+    .logo-wrapper {
+        gap: 7px;
+    }
+
+    .logo-icon {
+        width: 45px;
+        height: 45px;
+    }
+
+    .logo-name {
+        font-size: 17px;
+    }
+
+    .logo-tagline {
+        font-size: 6px;
+        letter-spacing: 0.8px;
+    }
+}
+
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 375px) {
+
+    .logo-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .logo-name {
+        font-size: 15px;
+    }
+
+    .logo-tagline {
+        font-size: 5px;
+    }
+}
     </style>
 
 </head>
@@ -399,35 +574,28 @@
 
             <!-- LOGO -->
 
-            <a
-                class="navbar-brand"
-                href="/"
+            <a class="navbar-brand" href="/">
+    <div class="logo-wrapper">
+
+        <div class="logo-icon">
+            <img
+                src="/media/logos/WhatsApp_Image_2026-08-31_at_9.53.38_PM-removebg-preview.png"
+                alt="Prime Estates Logo"
             >
+        </div>
 
-                <div class="logo-wrapper">
+        <div class="logo-text">
+            <div class="logo-name">
+                V3 LAND VENTURES
+            </div>
 
-                    <div class="logo-icon">
+            <div class="logo-tagline">
+                LAND • HOMES • INVESTMENTS
+            </div>
+        </div>
 
-                        <i class="fa-solid fa-building"></i>
-
-                    </div>
-
-
-                    <div>
-
-                        <div class="logo-name">
-                            PRIME ESTATES
-                        </div>
-
-                        <div class="logo-tagline">
-                            LAND • HOMES • INVESTMENTS
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </a>
+    </div>
+</a>
 
 
             <!-- MOBILE MENU BUTTON -->
@@ -535,7 +703,7 @@
      CHAT BUTTON
 ===================================== -->
 
-<div
+<!-- <div
     class="chat-button"
     id="chatButton"
 >
@@ -546,7 +714,7 @@
         Chat With Us
     </a>
 
-</div>
+</div> -->
 
 
 <!-- =====================================
@@ -565,7 +733,7 @@
             <div class="col-lg-4">
 
                 <h4 class="footer-title">
-                    PRIME ESTATES
+                    V3 LAND VENTURES
                 </h4>
 
                 <p>
@@ -581,7 +749,7 @@
                         <i class="fab fa-facebook-f"></i>
                     </a>
 
-                    <a href="#">
+                    <a href="https://www.instagram.com/v3landventures?igsi=MWptcDhvcTVoMm5lZQ=="  target="_blank">
                         <i class="fab fa-instagram"></i>
                     </a>
 
@@ -696,7 +864,7 @@
 
                     <i class="fa-solid fa-phone"></i>
 
-                    +91 98765 43210
+                    +91 78428 54808
 
                 </p>
 
@@ -704,8 +872,7 @@
 
                     <i class="fa-solid fa-envelope"></i>
 
-                    info@primeestates.com
-
+V3landventures@gmail.com
                 </p>
 
             </div>
@@ -719,7 +886,7 @@
         <div class="footer-bottom">
 
             <p>
-                © 2026 Prime Estates.
+                © 2026 V3 LAND VENTURES
                 All Rights Reserved.
             </p>
 
@@ -1224,6 +1391,8 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 </script>
+{% block extra_js %}
+{% endblock %}
 
 
 </body>

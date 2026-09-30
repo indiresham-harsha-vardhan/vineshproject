@@ -1,44 +1,42 @@
 {% extends "base.html" %}
 
 {% block title %}
-{{ property.title }} | Prime Estates
+{{ property.title }} | V3 LAND VENTURES
 {% endblock %}
-
 
 {% block content %}
 
 <section class="property-detail-page">
 
-    <div class="container">
+```
+<div class="container">
 
-        <!-- BREADCRUMB -->
+    <!-- BREADCRUMB -->
 
-        <div class="property-breadcrumb">
+    <div class="property-breadcrumb">
 
-            <a href="{% url 'property_list' %}">
-                Properties
-            </a>
+        <a href="{% url 'property_list' %}">
+            Properties
+        </a>
 
-            <span>
-                /
-            </span>
+        <span>/</span>
 
-            <span>
-                {{ property.title }}
-            </span>
+        <span>
+            {{ property.title }}
+        </span>
 
-        </div>
+    </div>
 
 
-        <!-- IMAGE GALLERY -->
+    <!-- IMAGE GALLERY -->
 
-        <div class="property-gallery">
+    <div class="property-gallery">
 
-            <div class="main-property-image">
+        <div class="main-property-image">
 
-                {% with property.images.all|first as image %}
+            {% with property.images.all|first as image %}
 
-                    {% if image %}
+                {% if image %}
 
                     <img
                         id="mainPropertyImage"
@@ -46,7 +44,7 @@
                         alt="{{ property.title }}"
                     >
 
-                    {% else %}
+                {% else %}
 
                     <div class="no-detail-image">
 
@@ -54,403 +52,616 @@
 
                     </div>
 
-                    {% endif %}
+                {% endif %}
 
-                {% endwith %}
+            {% endwith %}
 
-            </div>
+        </div>
 
 
-            <div class="property-thumbnails">
+        {% if property.images.all %}
 
-                {% for image in property.images.all %}
+        <div class="property-thumbnails">
+
+            {% for image in property.images.all %}
 
                 <button
                     type="button"
-                    class="property-thumbnail"
-                    onclick="changePropertyImage(
-                        '{{ image.image.url }}'
-                    )"
+                    class="property-thumbnail {% if forloop.first %}active{% endif %}"
+                    data-image-url="{{ image.image.url }}"
+                    aria-label="View property image {{ forloop.counter }}"
                 >
 
                     <img
                         src="{{ image.image.url }}"
-                        alt="{{ property.title }}"
+                        alt="{{ image.title|default:property.title }}"
                     >
 
                 </button>
 
-                {% endfor %}
-
-            </div>
-
-        </div>
-
-
-        <!-- PROPERTY INFORMATION -->
-
-        <div class="property-detail-layout">
-
-
-            <!-- LEFT -->
-
-            <div class="property-main-content">
-
-
-                <div class="property-detail-badges">
-
-                    <span class="detail-type">
-
-                        {{ property.property_type.name }}
-
-                    </span>
-
-
-                    <span class="detail-status">
-
-                        {{ property.get_status_display }}
-
-                    </span>
-
-                </div>
-
-
-                <h1>
-
-                    {{ property.title }}
-
-                </h1>
-
-
-                <div class="detail-location">
-
-                    <i class="fa-solid fa-location-dot"></i>
-
-                    {{ property.location }}
-
-                    {% if property.city %}
-
-                        , {{ property.city }}
-
-                    {% endif %}
-
-                </div>
-
-
-                <!-- PRICE -->
-
-                <div class="detail-price">
-
-                    {% if property.price %}
-
-                        ₹ {{ property.price|floatformat:0 }}
-
-                    {% else %}
-
-                        Price on Request
-
-                    {% endif %}
-
-                </div>
-
-
-                <!-- DETAILS -->
-
-                <div class="detail-section">
-
-                    <h2>
-                        Property Details
-                    </h2>
-
-
-                    <div class="detail-grid">
-
-
-                        {% if property.area_sqft %}
-
-                        <div class="detail-item">
-
-                            <span>
-                                Area
-                            </span>
-
-                            <strong>
-
-                                {{ property.area_sqft }}
-                                Sq.Ft
-
-                            </strong>
-
-                        </div>
-
-                        {% endif %}
-
-
-                        <div class="detail-item">
-
-                            <span>
-                                Property Type
-                            </span>
-
-                            <strong>
-
-                                {{ property.property_type.name }}
-
-                            </strong>
-
-                        </div>
-
-
-                        <div class="detail-item">
-
-                            <span>
-                                Location
-                            </span>
-
-                            <strong>
-
-                                {{ property.location }}
-
-                            </strong>
-
-                        </div>
-
-
-                        <div class="detail-item">
-
-                            <span>
-                                Status
-                            </span>
-
-                            <strong>
-
-                                {{ property.get_status_display }}
-
-                            </strong>
-
-                        </div>
-
-
-                        {% if property.bedrooms %}
-
-                        <div class="detail-item">
-
-                            <span>
-                                Bedrooms
-                            </span>
-
-                            <strong>
-
-                                {{ property.bedrooms }}
-
-                            </strong>
-
-                        </div>
-
-                        {% endif %}
-
-
-                        {% if property.bathrooms %}
-
-                        <div class="detail-item">
-
-                            <span>
-                                Bathrooms
-                            </span>
-
-                            <strong>
-
-                                {{ property.bathrooms }}
-
-                            </strong>
-
-                        </div>
-
-                        {% endif %}
-
-
-                    </div>
-
-                </div>
-
-
-                <!-- DESCRIPTION -->
-
-                <div class="detail-section">
-
-                    <h2>
-                        Description
-                    </h2>
-
-                    <div class="property-description">
-
-                        {{ property.description|linebreaks }}
-
-                    </div>
-
-                </div>
-
-
-                <!-- AMENITIES -->
-
-                {% if property.amenities.all %}
-
-                <div class="detail-section">
-
-                    <h2>
-                        Amenities & Features
-                    </h2>
-
-
-                    <div class="amenities-list">
-
-                        {% for amenity in property.amenities.all %}
-
-                        <div class="amenity-item">
-
-                            <i class="fa-solid fa-check"></i>
-
-                            {{ amenity.name }}
-
-                        </div>
-
-                        {% endfor %}
-
-                    </div>
-
-                </div>
-
-                {% endif %}
-
-
-            </div>
-
-
-            <!-- RIGHT CONTACT CARD -->
-
-            <div class="property-contact-card">
-
-                <div class="contact-card-inner">
-
-                    <span>
-                        INTERESTED IN THIS PROPERTY?
-                    </span>
-
-
-                    <h2>
-                        Let's Talk
-                    </h2>
-
-
-                    <p>
-                        Our property experts can
-                        provide complete information
-                        about this property.
-                    </p>
-
-
-                    <a
-                        href="{% url 'chat' %}"
-                        class="detail-chat-button"
-                    >
-
-                        <i class="fa-solid fa-comments"></i>
-
-                        Chat With Us
-
-                    </a>
-
-
-                    <a
-                        href="{% url 'contact' %}"
-                        class="detail-contact-button"
-                    >
-
-                        <i class="fa-solid fa-phone"></i>
-
-                        Contact Us
-
-                    </a>
-
-
-                    <div class="contact-card-divider">
-
-                        OR
-
-                    </div>
-
-
-                    <p class="contact-note">
-
-                        Mention the property name
-                        when contacting us.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- MAP -->
-
-        {% if property.google_maps_location %}
-
-        <div class="map-section">
-
-            <h2>
-                Property Location
-            </h2>
-
-
-            <div class="map-container">
-
-                <iframe
-                    src="{{ property.google_maps_location }}"
-                    loading="lazy"
-                    allowfullscreen
-                >
-                </iframe>
-
-            </div>
+            {% endfor %}
 
         </div>
 
         {% endif %}
 
+    </div>
+
+
+    <!-- PROPERTY INFORMATION -->
+
+    <div class="property-detail-layout">
+
+
+        <!-- LEFT -->
+
+        <div class="property-main-content">
+
+
+            <div class="property-detail-badges">
+
+                <span class="detail-type">
+
+                    {{ property.property_type.name }}
+
+                </span>
+
+
+                <span class="detail-status">
+
+                    {{ property.get_status_display }}
+
+                </span>
+
+            </div>
+
+
+            <h1>
+
+                {{ property.title }}
+
+            </h1>
+
+
+            <div class="detail-location">
+
+                <i class="fa-solid fa-location-dot"></i>
+
+                {{ property.location }}
+
+                {% if property.city %}
+
+                    , {{ property.city }}
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- PRICE -->
+
+            <div class="detail-price">
+
+                {% if property.price %}
+
+                    ₹ {{ property.price|floatformat:0 }}
+
+                {% else %}
+
+                    Price on Request
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- DETAILS -->
+
+            <div class="detail-section">
+
+                <h2>
+                    Property Details
+                </h2>
+
+
+                <div class="detail-grid">
+
+
+                    {% if property.area_sqft %}
+
+                    <div class="detail-item">
+
+                        <span>
+                            Area
+                        </span>
+
+                        <strong>
+
+                            {{ property.area_sqft }}
+                            Sq.Ft
+
+                        </strong>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Property Type
+                        </span>
+
+                        <strong>
+
+                            {{ property.property_type.name }}
+
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Location
+                        </span>
+
+                        <strong>
+
+                            {{ property.location }}
+
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Status
+                        </span>
+
+                        <strong>
+
+                            {{ property.get_status_display }}
+
+                        </strong>
+
+                    </div>
+
+
+                    {% if property.bedrooms %}
+
+                    <div class="detail-item">
+
+                        <span>
+                            Bedrooms
+                        </span>
+
+                        <strong>
+
+                            {{ property.bedrooms }}
+
+                        </strong>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    {% if property.bathrooms %}
+
+                    <div class="detail-item">
+
+                        <span>
+                            Bathrooms
+                        </span>
+
+                        <strong>
+
+                            {{ property.bathrooms }}
+
+                        </strong>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    {% if property.floors %}
+
+                    <div class="detail-item">
+
+                        <span>
+                            Floors
+                        </span>
+
+                        <strong>
+
+                            {{ property.floors }}
+
+                        </strong>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    {% if property.parking %}
+
+                    <div class="detail-item">
+
+                        <span>
+                            Parking
+                        </span>
+
+                        <strong>
+
+                            {{ property.parking }}
+
+                        </strong>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    {% if property.facing %}
+
+                    <div class="detail-item">
+
+                        <span>
+                            Facing
+                        </span>
+
+                        <strong>
+
+                            {{ property.get_facing_display }}
+
+                        </strong>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    {% if property.furnishing %}
+
+                    <div class="detail-item">
+
+                        <span>
+                            Furnishing
+                        </span>
+
+                        <strong>
+
+                            {{ property.get_furnishing_display }}
+
+                        </strong>
+
+                    </div>
+
+                    {% endif %}
+
+
+                </div>
+
+            </div>
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="detail-section">
+
+                <h2>
+                    Description
+                </h2>
+
+                <div class="property-description">
+
+                    {{ property.description|linebreaks }}
+
+                </div>
+
+            </div>
+
+
+            <!-- AMENITIES -->
+
+            {% if property.amenities.all %}
+
+            <div class="detail-section">
+
+                <h2>
+                    Amenities & Features
+                </h2>
+
+
+                <div class="amenities-list">
+
+                    {% for amenity in property.amenities.all %}
+
+                    <div class="amenity-item">
+
+                        <i class="fa-solid fa-check"></i>
+
+                        {{ amenity.name }}
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- VIDEOS -->
+
+            {% if property.videos.all %}
+
+            <div class="detail-section">
+
+                <h2>
+                    Property Video
+                </h2>
+
+                {% for video in property.videos.all %}
+
+                    {% if video.video %}
+
+                        <video
+                            class="property-video"
+                            controls
+                            preload="metadata"
+                        >
+
+                            <source
+                                src="{{ video.video.url }}"
+                                type="video/mp4"
+                            >
+
+                            Your browser does not support video playback.
+
+                        </video>
+
+                    {% elif video.video_url %}
+
+                        <div class="property-video-wrapper">
+
+                            <iframe
+                                src="{{ video.video_url }}"
+                                title="{{ video.title|default:property.title }}"
+                                loading="lazy"
+                                allowfullscreen
+                            >
+                            </iframe>
+
+                        </div>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+            {% endif %}
+
+
+        </div>
+
+
+        <!-- RIGHT CONTACT CARD -->
+
+        <div class="property-contact-card">
+
+            <div class="contact-card-inner">
+
+                <span>
+                    INTERESTED IN THIS PROPERTY?
+                </span>
+
+
+                <h2>
+                    Let's Talk
+                </h2>
+
+
+                <p>
+                    Our property experts can
+                    provide complete information
+                    about this property.
+                </p>
+
+
+                <a
+                    href="{% url 'chat' %}"
+                    class="detail-chat-button"
+                >
+
+                    <i class="fa-solid fa-comments"></i>
+
+                    Chat With Us
+
+                </a>
+
+
+                <a
+                    href="{% url 'contact' %}"
+                    class="detail-contact-button"
+                >
+
+                    <i class="fa-solid fa-phone"></i>
+
+                    Contact Us
+
+                </a>
+
+
+                <div class="contact-card-divider">
+
+                    OR
+
+                </div>
+
+
+                <p class="contact-note">
+
+                    Mention the property name
+                    when contacting us.
+
+                </p>
+
+            </div>
+
+        </div>
 
     </div>
 
+
+    <!-- MAP -->
+
+    {% if property.google_maps_location %}
+
+    <div class="map-section">
+
+        <h2>
+            Property Location
+        </h2>
+
+
+        <div class="map-container">
+
+            <iframe
+                src="{{ property.google_maps_location }}"
+                loading="lazy"
+                allowfullscreen
+            >
+            </iframe>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+</div>
+```
+
 </section>
 
-{% endblock %}
-{% block extra_js %}
+<!-- GALLERY JAVASCRIPT -->
 
 <script>
 
-function changePropertyImage(imageUrl) {
+document.addEventListener("DOMContentLoaded", function () {
 
     const mainImage =
-        document.getElementById(
-            "mainPropertyImage"
+        document.getElementById("mainPropertyImage");
+
+    const thumbnails =
+        document.querySelectorAll(".property-thumbnail");
+
+
+    if (!mainImage) {
+
+        console.log(
+            "No main property image found."
         );
 
-    if (mainImage) {
-
-        mainImage.src = imageUrl;
+        return;
 
     }
 
-}
+
+    thumbnails.forEach(function (thumbnail) {
+
+        thumbnail.addEventListener(
+            "click",
+            function () {
+
+                const imageUrl =
+                    this.getAttribute(
+                        "data-image-url"
+                    );
+
+
+                if (!imageUrl) {
+
+                    console.error(
+                        "Image URL is missing."
+                    );
+
+                    return;
+
+                }
+
+
+                /*
+                 * Remove active state
+                 * from all thumbnails.
+                 */
+
+                thumbnails.forEach(
+                    function (item) {
+
+                        item.classList.remove(
+                            "active"
+                        );
+
+                    }
+                );
+
+
+                /*
+                 * Add active state
+                 * to clicked thumbnail.
+                 */
+
+                this.classList.add(
+                    "active"
+                );
+
+
+                /*
+                 * Small fade animation.
+                 */
+
+                mainImage.style.opacity = "0";
+
+
+                setTimeout(function () {
+
+                    mainImage.src =
+                        imageUrl;
+
+                    mainImage.onload =
+                        function () {
+
+                            mainImage.style.opacity =
+                                "1";
+
+                        };
+
+                }, 150);
+
+            }
+        );
+
+    });
+
+});
 
 </script>
 
-{% endblock %}
-{% block extra_css %}
-
 <style>
+
+/* PAGE */
 
 .property-detail-page {
 
@@ -479,12 +690,17 @@ function changePropertyImage(imageUrl) {
 
 }
 
-
 .property-breadcrumb a {
 
     color: #8b5e3c;
 
     text-decoration: none;
+
+}
+
+.property-breadcrumb a:hover {
+
+    text-decoration: underline;
 
 }
 
@@ -514,6 +730,8 @@ function changePropertyImage(imageUrl) {
 
     border-radius: 12px;
 
+    background: #eee7df;
+
 }
 
 
@@ -525,8 +743,14 @@ function changePropertyImage(imageUrl) {
 
     object-fit: cover;
 
+    display: block;
+
+    transition: opacity 0.25s ease;
+
 }
 
+
+/* NO IMAGE */
 
 .no-detail-image {
 
@@ -549,6 +773,8 @@ function changePropertyImage(imageUrl) {
 }
 
 
+/* THUMBNAILS */
+
 .property-thumbnails {
 
     display: flex;
@@ -558,6 +784,8 @@ function changePropertyImage(imageUrl) {
     overflow-x: auto;
 
     padding: 10px 0 0;
+
+    scrollbar-width: thin;
 
 }
 
@@ -582,10 +810,23 @@ function changePropertyImage(imageUrl) {
 
     cursor: pointer;
 
+    transition:
+        border-color 0.2s ease,
+        transform 0.2s ease;
+
 }
 
 
 .property-thumbnail:hover {
+
+    border-color: #8b5e3c;
+
+    transform: translateY(-2px);
+
+}
+
+
+.property-thumbnail.active {
 
     border-color: #8b5e3c;
 
@@ -600,6 +841,8 @@ function changePropertyImage(imageUrl) {
 
     object-fit: cover;
 
+    display: block;
+
 }
 
 
@@ -610,7 +853,7 @@ function changePropertyImage(imageUrl) {
     display: grid;
 
     grid-template-columns:
-        1fr 350px;
+        minmax(0, 1fr) 350px;
 
     gap: 45px;
 
@@ -664,6 +907,8 @@ function changePropertyImage(imageUrl) {
 }
 
 
+/* TITLE */
+
 .property-main-content h1 {
 
     font-family:
@@ -675,8 +920,12 @@ function changePropertyImage(imageUrl) {
 
     margin-bottom: 12px;
 
+    line-height: 1.15;
+
 }
 
+
+/* LOCATION */
 
 .detail-location {
 
@@ -691,8 +940,12 @@ function changePropertyImage(imageUrl) {
 
     color: #8b5e3c;
 
+    margin-right: 5px;
+
 }
 
+
+/* PRICE */
 
 .detail-price {
 
@@ -824,6 +1077,51 @@ function changePropertyImage(imageUrl) {
 }
 
 
+/* VIDEOS */
+
+.property-video {
+
+    width: 100%;
+
+    max-height: 500px;
+
+    border-radius: 12px;
+
+    background: #111;
+
+    display: block;
+
+    margin-bottom: 20px;
+
+}
+
+
+.property-video-wrapper {
+
+    position: relative;
+
+    width: 100%;
+
+    aspect-ratio: 16 / 9;
+
+    overflow: hidden;
+
+    border-radius: 12px;
+
+}
+
+
+.property-video-wrapper iframe {
+
+    width: 100%;
+
+    height: 100%;
+
+    border: 0;
+
+}
+
+
 /* CONTACT CARD */
 
 .property-contact-card {
@@ -906,12 +1204,23 @@ function changePropertyImage(imageUrl) {
 
     font-weight: 600;
 
+    transition: 0.2s ease;
+
 }
 
 
 .detail-chat-button {
 
     background: #8b5e3c;
+
+    color: white;
+
+}
+
+
+.detail-chat-button:hover {
+
+    opacity: 0.9;
 
     color: white;
 
@@ -926,6 +1235,17 @@ function changePropertyImage(imageUrl) {
 
 }
 
+
+.detail-contact-button:hover {
+
+    background: #f2eee9;
+
+    color: #332820;
+
+}
+
+
+/* DIVIDER */
 
 .contact-card-divider {
 
@@ -991,9 +1311,9 @@ function changePropertyImage(imageUrl) {
 }
 
 
-/* MOBILE */
+/* TABLET */
 
-@media(max-width:900px) {
+@media(max-width: 900px) {
 
     .property-detail-layout {
 
@@ -1011,11 +1331,68 @@ function changePropertyImage(imageUrl) {
 }
 
 
-@media(max-width:600px) {
+/* MOBILE */
+
+@media(max-width: 600px) {
+
+    .property-detail-page {
+
+        padding: 25px 0 70px;
+
+    }
+
 
     .main-property-image {
 
         height: 350px;
+
+    }
+
+
+    .property-gallery {
+
+        padding: 7px;
+
+        border-radius: 14px;
+
+    }
+
+
+    .property-thumbnails {
+
+        gap: 8px;
+
+    }
+
+
+    .property-thumbnail {
+
+        width: 75px;
+
+        height: 60px;
+
+    }
+
+
+    .property-detail-layout {
+
+        margin-top: 30px;
+
+        gap: 25px;
+
+    }
+
+
+    .property-main-content h1 {
+
+        font-size: 34px;
+
+    }
+
+
+    .detail-price {
+
+        font-size: 25px;
 
     }
 
@@ -1037,6 +1414,49 @@ function changePropertyImage(imageUrl) {
     .detail-section {
 
         padding: 20px;
+
+        border-radius: 12px;
+
+    }
+
+
+    .contact-card-inner {
+
+        padding: 25px;
+
+    }
+
+
+    .map-container {
+
+        height: 300px;
+
+    }
+
+}
+
+
+/* VERY SMALL DEVICES */
+
+@media(max-width: 400px) {
+
+    .main-property-image {
+
+        height: 280px;
+
+    }
+
+
+    .property-main-content h1 {
+
+        font-size: 29px;
+
+    }
+
+
+    .detail-section {
+
+        padding: 17px;
 
     }
 

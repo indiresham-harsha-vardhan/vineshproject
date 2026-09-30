@@ -1,0 +1,945 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ page_title }} | V3 LAND VENTURES
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+    .property-form-page {
+        min-height: 100vh;
+        background: #f8f6f2;
+        padding: 50px 0 80px;
+    }
+
+    .form-header {
+        margin-bottom: 35px;
+    }
+
+    .form-label-top {
+        color: #8b5e3c;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+    }
+
+    .form-title {
+        color: #2d211b;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .form-subtitle {
+        color: #777;
+    }
+
+    .form-card {
+        background: #fff;
+        border: 1px solid #e8e1d9;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 8px 30px rgba(60, 40, 20, .05);
+        margin-bottom: 25px;
+    }
+
+    .section-title {
+        color: #2d211b;
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 22px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #eee5dc;
+    }
+
+    .form-label {
+        color: #49352a;
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 7px;
+    }
+
+    .form-control,
+    .form-select {
+        border: 1px solid #ddd3ca;
+        border-radius: 10px;
+        min-height: 46px;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #8b5e3c;
+        box-shadow: 0 0 0 .2rem rgba(139, 94, 60, .12);
+    }
+
+    textarea.form-control {
+        min-height: 120px;
+    }
+
+    .required-star {
+        color: #b42318;
+    }
+
+    .error-list {
+        color: #b42318;
+        font-size: 13px;
+        margin-top: 5px;
+    }
+
+    .checkbox-wrapper {
+        background: #faf7f3;
+        border: 1px solid #e8e1d9;
+        border-radius: 12px;
+        padding: 15px;
+    }
+
+    .media-card {
+        border: 1px solid #e8e1d9;
+        border-radius: 15px;
+        overflow: hidden;
+        background: #fff;
+        height: 100%;
+    }
+
+    .media-card img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+    }
+
+    .media-content {
+        padding: 15px;
+    }
+
+    .media-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #3b2b22;
+    }
+
+    .media-empty {
+        background: #f5f1ec;
+        height: 180px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #aaa;
+        font-size: 40px;
+    }
+
+    .bottom-actions {
+        position: sticky;
+        bottom: 0;
+        z-index: 10;
+        background: rgba(255,255,255,.96);
+        backdrop-filter: blur(10px);
+        border-top: 1px solid #e8e1d9;
+        padding: 15px 0;
+    }
+
+    .btn-save {
+        background: #6f442b;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 25px;
+        font-weight: 600;
+    }
+
+    .btn-save:hover {
+        background: #4f2f1f;
+        color: #fff;
+    }
+
+    .btn-back {
+        border: 1px solid #cfc4bb;
+        color: #49352a;
+        border-radius: 10px;
+        padding: 11px 20px;
+        font-weight: 600;
+        background: #fff;
+    }
+
+    .btn-back:hover {
+        background: #f5f1ec;
+        color: #49352a;
+    }
+
+    .media-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    @media (max-width: 767px) {
+        .property-form-page {
+            padding: 30px 0 60px;
+        }
+
+        .form-card {
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .form-title {
+            font-size: 28px;
+        }
+
+        .bottom-actions .container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .bottom-actions .btn {
+            width: 100%;
+        }
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<section class="property-form-page">
+
+```
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="form-header">
+
+        <div class="form-label-top">
+            Property Management
+        </div>
+
+        <h1 class="form-title">
+            {{ page_title }}
+        </h1>
+
+        <p class="form-subtitle mb-0">
+            {% if property_obj %}
+                Update the property information and manage its media.
+            {% else %}
+                Add a new property to your real-estate listings.
+            {% endif %}
+        </p>
+
+    </div>
+
+
+    <!-- DJANGO MESSAGES -->
+    {% if messages %}
+        {% for message in messages %}
+
+            <div class="alert alert-{{ message.tags|default:'success' }} alert-dismissible fade show">
+                {{ message }}
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+                </button>
+            </div>
+
+        {% endfor %}
+    {% endif %}
+
+
+    <!-- FORM ERRORS -->
+
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+
+            {% for error in form.non_field_errors %}
+                <div>{{ error }}</div>
+            {% endfor %}
+
+        </div>
+    {% endif %}
+
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+
+        <!-- BASIC INFORMATION -->
+
+        <div class="form-card">
+
+            <h2 class="section-title">
+                <i class="bi bi-building me-2"></i>
+                Basic Information
+            </h2>
+
+
+            <div class="row g-4">
+
+                <!-- TITLE -->
+
+                <div class="col-12">
+
+                    <label class="form-label">
+                        Property Title
+                        <span class="required-star">*</span>
+                    </label>
+
+                    {{ form.title }}
+
+                    {% for error in form.title.errors %}
+                        <div class="error-list">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- PROPERTY TYPE -->
+
+                <div class="col-12 col-md-6">
+
+                    <label class="form-label">
+                        Property Type
+                        <span class="required-star">*</span>
+                    </label>
+
+                    {{ form.property_type }}
+
+                    {% for error in form.property_type.errors %}
+                        <div class="error-list">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="col-12 col-md-6">
+
+                    <label class="form-label">
+                        Status
+                    </label>
+
+                    {{ form.status }}
+
+                    {% for error in form.status.errors %}
+                        <div class="error-list">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="col-12">
+
+                    <label class="form-label">
+                        Description
+                        <span class="required-star">*</span>
+                    </label>
+
+                    {{ form.description }}
+
+                    {% for error in form.description.errors %}
+                        <div class="error-list">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PRICE -->
+
+        <div class="form-card">
+
+            <h2 class="section-title">
+                <i class="bi bi-currency-rupee me-2"></i>
+                Pricing
+            </h2>
+
+            <div class="row g-4">
+
+                <div class="col-12 col-md-6">
+
+                    <label class="form-label">
+                        Price
+                    </label>
+
+                    {{ form.price }}
+
+                    {% for error in form.price.errors %}
+                        <div class="error-list">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <div class="col-12 col-md-6">
+
+                    <label class="form-label">
+                        Price Type
+                    </label>
+
+                    {{ form.price_type }}
+
+                    {% for error in form.price_type.errors %}
+                        <div class="error-list">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- LOCATION -->
+
+        <div class="form-card">
+
+            <h2 class="section-title">
+                <i class="bi bi-geo-alt me-2"></i>
+                Location
+            </h2>
+
+            <div class="row g-4">
+
+                <div class="col-12">
+
+                    <label class="form-label">
+                        Location / Locality
+                    </label>
+
+                    {{ form.location }}
+
+                </div>
+
+
+                <div class="col-12 col-md-4">
+
+                    <label class="form-label">
+                        City
+                    </label>
+
+                    {{ form.city }}
+
+                </div>
+
+
+                <div class="col-12 col-md-4">
+
+                    <label class="form-label">
+                        State
+                    </label>
+
+                    {{ form.state }}
+
+                </div>
+
+
+                <div class="col-12 col-md-4">
+
+                    <label class="form-label">
+                        Pincode
+                    </label>
+
+                    {{ form.pincode }}
+
+                </div>
+
+
+                <div class="col-12">
+
+                    <label class="form-label">
+                        Complete Address
+                    </label>
+
+                    {{ form.address }}
+
+                </div>
+
+
+                <div class="col-12 col-md-6">
+
+                    <label class="form-label">
+                        Latitude
+                    </label>
+
+                    {{ form.latitude }}
+
+                </div>
+
+
+                <div class="col-12 col-md-6">
+
+                    <label class="form-label">
+                        Longitude
+                    </label>
+
+                    {{ form.longitude }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PROPERTY DETAILS -->
+
+        <div class="form-card">
+
+            <h2 class="section-title">
+                <i class="bi bi-rulers me-2"></i>
+                Property Details
+            </h2>
+
+            <div class="row g-4">
+
+                <div class="col-12 col-md-4">
+
+                    <label class="form-label">
+                        Area (sq.ft)
+                    </label>
+
+                    {{ form.area_sqft }}
+
+                </div>
+
+
+                <div class="col-12 col-md-4">
+
+                    <label class="form-label">
+                        Plot Area
+                    </label>
+
+                    {{ form.plot_area }}
+
+                </div>
+
+
+                <div class="col-12 col-md-4">
+
+                    <label class="form-label">
+                        Built-up Area
+                    </label>
+
+                    {{ form.built_up_area }}
+
+                </div>
+
+
+                <div class="col-6 col-md-3">
+
+                    <label class="form-label">
+                        Bedrooms
+                    </label>
+
+                    {{ form.bedrooms }}
+
+                </div>
+
+
+                <div class="col-6 col-md-3">
+
+                    <label class="form-label">
+                        Bathrooms
+                    </label>
+
+                    {{ form.bathrooms }}
+
+                </div>
+
+
+                <div class="col-6 col-md-3">
+
+                    <label class="form-label">
+                        Floors
+                    </label>
+
+                    {{ form.floors }}
+
+                </div>
+
+
+                <div class="col-6 col-md-3">
+
+                    <label class="form-label">
+                        Parking
+                    </label>
+
+                    {{ form.parking }}
+
+                </div>
+
+
+                <div class="col-12 col-md-6">
+
+                    <label class="form-label">
+                        Facing
+                    </label>
+
+                    {{ form.facing }}
+
+                </div>
+
+
+                <div class="col-12 col-md-6">
+
+                    <label class="form-label">
+                        Furnishing
+                    </label>
+
+                    {{ form.furnishing }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- AMENITIES -->
+
+        <div class="form-card">
+
+            <h2 class="section-title">
+                <i class="bi bi-stars me-2"></i>
+                Amenities
+            </h2>
+
+            <div class="row">
+
+                <div class="col-12 col-md-8">
+
+                    <label class="form-label">
+                        Select Amenities
+                    </label>
+
+                    {{ form.amenities }}
+
+                    <small class="text-muted">
+                        Hold Ctrl (Windows) or Command (Mac) to select multiple amenities.
+                    </small>
+
+                </div>
+
+                <div class="col-12 col-md-4 mt-4 mt-md-0">
+
+                    <div class="checkbox-wrapper">
+
+                        <div class="form-check">
+
+                            {{ form.featured }}
+
+                            <label class="form-check-label fw-semibold">
+                                Featured Property
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- EXISTING IMAGES -->
+
+        {% if property_obj %}
+
+        <div class="form-card">
+
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+
+                <h2 class="section-title mb-0">
+                    <i class="bi bi-images me-2"></i>
+                    Property Images
+                </h2>
+
+                <a
+                    href="{% url 'properties:property_image_add' property_obj.pk %}"
+                    class="btn btn-sm btn-save">
+
+                    <i class="bi bi-plus-lg me-1"></i>
+                    Add Image
+
+                </a>
+
+            </div>
+
+
+            {% if images %}
+
+                <div class="row g-4">
+
+                    {% for image in images %}
+
+                        <div class="col-12 col-sm-6 col-lg-4">
+
+                            <div class="media-card">
+
+                                {% if image.image %}
+
+                                    <img
+                                        src="{{ image.image.url }}"
+                                        alt="{{ image.title|default:property_obj.title }}">
+
+                                {% else %}
+
+                                    <div class="media-empty">
+                                        <i class="bi bi-image"></i>
+                                    </div>
+
+                                {% endif %}
+
+
+                                <div class="media-content">
+
+                                    <div class="media-title mb-2">
+
+                                        {% if image.title %}
+                                            {{ image.title }}
+                                        {% else %}
+                                            Property Image
+                                        {% endif %}
+
+                                    </div>
+
+
+                                    {% if image.is_primary %}
+
+                                        <span class="badge text-bg-success mb-3">
+                                            Primary
+                                        </span>
+
+                                    {% endif %}
+
+
+                                    <div class="media-actions">
+
+                                        <a
+                                            href="{% url 'properties:property_image_delete' image.id %}"
+                                            class="btn btn-sm btn-outline-danger">
+
+                                            <i class="bi bi-trash me-1"></i>
+                                            Delete
+
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="text-center py-5">
+
+                    <i class="bi bi-images display-5 text-muted"></i>
+
+                    <p class="text-muted mt-3 mb-0">
+                        No images have been added yet.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- VIDEOS -->
+
+        <div class="form-card">
+
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+
+                <h2 class="section-title mb-0">
+                    <i class="bi bi-camera-video me-2"></i>
+                    Property Videos
+                </h2>
+
+                <a
+                    href="{% url 'properties:property_video_add' property_obj.pk %}"
+                    class="btn btn-sm btn-save">
+
+                    <i class="bi bi-plus-lg me-1"></i>
+                    Add Video
+
+                </a>
+
+            </div>
+
+
+            {% if videos %}
+
+                <div class="row g-4">
+
+                    {% for video in videos %}
+
+                        <div class="col-12 col-md-6">
+
+                            <div class="media-card">
+
+                                {% if video.video %}
+
+                                    <video
+                                        controls
+                                        style="width:100%;height:220px;object-fit:cover;">
+
+                                        <source
+                                            src="{{ video.video.url }}">
+
+                                    </video>
+
+                                {% elif video.video_url %}
+
+                                    <div class="media-empty">
+
+                                        <i class="bi bi-play-circle"></i>
+
+                                    </div>
+
+                                {% else %}
+
+                                    <div class="media-empty">
+                                        <i class="bi bi-camera-video"></i>
+                                    </div>
+
+                                {% endif %}
+
+
+                                <div class="media-content">
+
+                                    <div class="media-title mb-2">
+
+                                        {% if video.title %}
+                                            {{ video.title }}
+                                        {% else %}
+                                            Property Video
+                                        {% endif %}
+
+                                    </div>
+
+
+                                    {% if video.video_url %}
+
+                                        <div class="small text-muted mb-3 text-break">
+                                            {{ video.video_url }}
+                                        </div>
+
+                                    {% endif %}
+
+
+                                    <a
+                                        href="{% url 'properties:property_video_delete' video.id %}"
+                                        class="btn btn-sm btn-outline-danger">
+
+                                        <i class="bi bi-trash me-1"></i>
+                                        Delete
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="text-center py-5">
+
+                    <i class="bi bi-camera-video display-5 text-muted"></i>
+
+                    <p class="text-muted mt-3 mb-0">
+                        No videos have been added yet.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- BOTTOM ACTIONS -->
+
+        <div class="bottom-actions">
+
+            <div class="container">
+
+                <div class="d-flex justify-content-between align-items-center gap-3">
+
+                    <a
+                        href="{% url 'properties:property_manage' %}"
+                        class="btn btn-back">
+
+                        <i class="bi bi-arrow-left me-2"></i>
+                        Back to Properties
+
+                    </a>
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-save">
+
+                        <i class="bi bi-check-lg me-2"></i>
+
+                        {% if property_obj %}
+                            Update Property
+                        {% else %}
+                            Create Property
+                        {% endif %}
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+```
+
+</section>
+
+{% endblock %}

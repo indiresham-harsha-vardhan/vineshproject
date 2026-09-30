@@ -1,0 +1,8 @@
+.env
+venv/
+__pycache__/
+*.pyc
+real_estate_backup.sql
+staticfiles/
+media_backup.zip
+media/

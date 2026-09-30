@@ -1,0 +1,1263 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ property.title }} | Prime Estates
+{% endblock %}
+
+
+{% block content %}
+
+<section class="property-detail-page">
+
+    <div class="container">
+
+        <!-- BREADCRUMB -->
+
+        <div class="property-breadcrumb">
+
+            <a href="/">
+                Home
+            </a>
+
+            <i class="fa-solid fa-angle-right"></i>
+
+            <a href="/properties/">
+                Properties
+            </a>
+
+            <i class="fa-solid fa-angle-right"></i>
+
+            <span>
+                {{ property.title }}
+            </span>
+
+        </div>
+
+
+        <!-- PROPERTY HEADER -->
+
+        <div class="property-detail-header">
+
+            <div>
+
+                <span class="detail-property-type">
+                    {{ property.property_type.name }}
+                </span>
+
+                <h1>
+                    {{ property.title }}
+                </h1>
+
+                <p class="detail-location">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    {{ property.location }},
+                    {{ property.city }},
+                    {{ property.state }}
+
+                </p>
+
+            </div>
+
+
+            <div class="detail-price">
+
+                {% if property.price %}
+
+                    ₹ {{ property.price|floatformat:0 }}
+
+                {% else %}
+
+                    Price on Request
+
+                {% endif %}
+
+                <small>
+                    {{ property.get_price_type_display }}
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- IMAGE GALLERY -->
+
+        <div class="property-gallery">
+
+            <div class="gallery-main">
+
+                {% with property.images.all|first as main_image %}
+
+                    {% if main_image %}
+
+                        <img
+                            src="{{ main_image.image.url }}"
+                            alt="{{ property.title }}"
+                            id="mainPropertyImage"
+                        >
+
+                    {% else %}
+
+                        <div class="gallery-no-image">
+
+                            <i class="fa-solid fa-house"></i>
+
+                            <p>
+                                No Image Available
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
+                {% endwith %}
+
+            </div>
+
+
+            <div class="gallery-thumbnails">
+
+                {% for image in property.images.all %}
+
+                    <div
+                        class="gallery-thumb"
+                        onclick="changePropertyImage('{{ image.image.url }}')"
+                    >
+
+                        <img
+                            src="{{ image.image.url }}"
+                            alt="{{ image.title }}"
+                        >
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <!-- MAIN CONTENT -->
+
+        <div class="row g-5 mt-2">
+
+
+            <!-- LEFT -->
+
+            <div class="col-lg-8">
+
+
+                <!-- OVERVIEW -->
+
+                <div class="detail-card">
+
+                    <h2>
+                        Property Overview
+                    </h2>
+
+                    <div class="overview-grid">
+
+
+                        {% if property.area_sqft %}
+
+                        <div class="overview-item">
+
+                            <i class="fa-solid fa-ruler-combined"></i>
+
+                            <div>
+
+                                <span>
+                                    Area
+                                </span>
+
+                                <strong>
+                                    {{ property.area_sqft }}
+                                    Sq.Ft
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                        {% endif %}
+
+
+                        {% if property.plot_area %}
+
+                        <div class="overview-item">
+
+                            <i class="fa-solid fa-vector-square"></i>
+
+                            <div>
+
+                                <span>
+                                    Plot Area
+                                </span>
+
+                                <strong>
+                                    {{ property.plot_area }}
+                                    Sq.Ft
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                        {% endif %}
+
+
+                        {% if property.bedrooms %}
+
+                        <div class="overview-item">
+
+                            <i class="fa-solid fa-bed"></i>
+
+                            <div>
+
+                                <span>
+                                    Bedrooms
+                                </span>
+
+                                <strong>
+                                    {{ property.bedrooms }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                        {% endif %}
+
+
+                        {% if property.bathrooms %}
+
+                        <div class="overview-item">
+
+                            <i class="fa-solid fa-bath"></i>
+
+                            <div>
+
+                                <span>
+                                    Bathrooms
+                                </span>
+
+                                <strong>
+                                    {{ property.bathrooms }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                        {% endif %}
+
+
+                        {% if property.facing %}
+
+                        <div class="overview-item">
+
+                            <i class="fa-solid fa-compass"></i>
+
+                            <div>
+
+                                <span>
+                                    Facing
+                                </span>
+
+                                <strong>
+                                    {{ property.get_facing_display }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                        {% endif %}
+
+
+                        {% if property.parking %}
+
+                        <div class="overview-item">
+
+                            <i class="fa-solid fa-car"></i>
+
+                            <div>
+
+                                <span>
+                                    Parking
+                                </span>
+
+                                <strong>
+                                    {{ property.parking }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                        {% endif %}
+
+
+                        <div class="overview-item">
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                            <div>
+
+                                <span>
+                                    Status
+                                </span>
+
+                                <strong>
+                                    {{ property.get_status_display }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="detail-card">
+
+                    <h2>
+                        About This Property
+                    </h2>
+
+                    <div class="property-description">
+
+                        {{ property.description|linebreaks }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- AMENITIES -->
+
+                {% if property.amenities.all %}
+
+                <div class="detail-card">
+
+                    <h2>
+                        Amenities & Features
+                    </h2>
+
+                    <div class="amenities-grid">
+
+                        {% for amenity in property.amenities.all %}
+
+                        <div class="amenity-item">
+
+                            {% if amenity.icon %}
+
+                                <i class="{{ amenity.icon }}"></i>
+
+                            {% else %}
+
+                                <i class="fa-solid fa-check"></i>
+
+                            {% endif %}
+
+                            <span>
+                                {{ amenity.name }}
+                            </span>
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- VIDEO -->
+
+                {% if property.videos.all %}
+
+                <div class="detail-card">
+
+                    <h2>
+                        Property Video
+                    </h2>
+
+                    {% for video in property.videos.all %}
+
+                        {% if video.video %}
+
+                        <video
+                            class="property-video"
+                            controls
+                        >
+
+                            <source
+                                src="{{ video.video.url }}"
+                            >
+
+                        </video>
+
+                        {% elif video.video_url %}
+
+                        <div class="video-link">
+
+                            <a
+                                href="{{ video.video_url }}"
+                                target="_blank"
+                            >
+
+                                Watch Property Video
+
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+                            </a>
+
+                        </div>
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- LOCATION -->
+
+                <div class="detail-card">
+
+                    <h2>
+                        Location
+                    </h2>
+
+                    <p class="location-address">
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                        {{ property.address }}
+
+                    </p>
+
+
+                    {% if property.latitude and property.longitude %}
+
+                    <div class="map-container">
+
+                        <iframe
+                            src="https://www.google.com/maps?q={{ property.latitude }},{{ property.longitude }}&output=embed"
+                            width="100%"
+                            height="400"
+                            style="border:0;"
+                            allowfullscreen=""
+                            loading="lazy"
+                        >
+                        </iframe>
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="map-placeholder">
+
+                        <i class="fa-solid fa-map-location-dot"></i>
+
+                        <p>
+                            Location map will be available soon.
+                        </p>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+
+            </div>
+
+
+            <!-- RIGHT SIDEBAR -->
+
+            <div class="col-lg-4">
+
+
+                <div class="enquiry-card">
+
+                    <div class="enquiry-icon">
+
+                        <i class="fa-solid fa-house-circle-check"></i>
+
+                    </div>
+
+                    <h3>
+                        Interested in this Property?
+                    </h3>
+
+                    <p>
+                        Contact our property experts
+                        for more information.
+                    </p>
+
+
+                    <a
+                        href="/contact/?property={{ property.property_id }}"
+                        class="enquiry-primary-btn"
+                    >
+
+                        <i class="fa-solid fa-paper-plane"></i>
+
+                        Enquire Now
+
+                    </a>
+
+
+                    <a
+                        href="tel:+919876543210"
+                        class="enquiry-secondary-btn"
+                    >
+
+                        <i class="fa-solid fa-phone"></i>
+
+                        Call Now
+
+                    </a>
+
+
+                    <a
+                        href="https://wa.me/919876543210?text=Hi%20I%20am%20interested%20in%20{{ property.title|urlencode }}"
+                        target="_blank"
+                        class="whatsapp-btn"
+                    >
+
+                        <i class="fa-brands fa-whatsapp"></i>
+
+                        WhatsApp
+
+                    </a>
+
+                </div>
+
+
+                <!-- PROPERTY ID -->
+
+                <div class="property-id-card">
+
+                    <span>
+                        Property ID
+                    </span>
+
+                    <strong>
+                        {{ property.property_id }}
+                    </strong>
+
+                </div>
+
+
+                <!-- QUICK CONTACT -->
+
+                <div class="quick-contact-card">
+
+                    <h4>
+                        Need Help?
+                    </h4>
+
+                    <p>
+                        Our property experts are
+                        available to assist you.
+                    </p>
+
+                    <p>
+
+                        <i class="fa-solid fa-phone"></i>
+
+                        +91 98765 43210
+
+                    </p>
+
+                    <p>
+
+                        <i class="fa-solid fa-envelope"></i>
+
+                        info@primeestates.com
+
+                    </p>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+
+
+{% block extra_css %}
+
+<style>
+
+.property-detail-page {
+
+    padding: 40px 0 80px;
+
+}
+
+
+/* BREADCRUMB */
+
+.property-breadcrumb {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 30px;
+
+    font-size: 13px;
+
+    color: #888;
+
+}
+
+.property-breadcrumb a {
+
+    color: #8b5e3c;
+
+    text-decoration: none;
+
+}
+
+
+/* HEADER */
+
+.property-detail-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-end;
+
+    gap: 30px;
+
+    margin-bottom: 30px;
+
+}
+
+.detail-property-type {
+
+    color: #8b5e3c;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+
+}
+
+.property-detail-header h1 {
+
+    font-family: "Playfair Display", serif;
+
+    font-size: clamp(35px, 5vw, 55px);
+
+    margin: 10px 0;
+
+}
+
+.detail-location {
+
+    color: #777;
+
+}
+
+.detail-location i {
+
+    color: #8b5e3c;
+
+}
+
+.detail-price {
+
+    color: #8b5e3c;
+
+    font-size: 30px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+}
+
+.detail-price small {
+
+    display: block;
+
+    font-size: 12px;
+
+    color: #888;
+
+    text-align: right;
+
+}
+
+
+/* GALLERY */
+
+.property-gallery {
+
+    background: white;
+
+    border-radius: 18px;
+
+    padding: 10px;
+
+    border: 1px solid #eee6de;
+
+    margin-bottom: 40px;
+
+}
+
+.gallery-main {
+
+    height: 550px;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    background: #eee7df;
+
+}
+
+.gallery-main img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+}
+
+.gallery-no-image {
+
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    color: #9b7a5d;
+
+}
+
+.gallery-no-image i {
+
+    font-size: 60px;
+
+}
+
+.gallery-thumbnails {
+
+    display: flex;
+
+    gap: 10px;
+
+    padding: 10px 0 0;
+
+    overflow-x: auto;
+
+}
+
+.gallery-thumb {
+
+    width: 100px;
+
+    height: 75px;
+
+    flex-shrink: 0;
+
+    border-radius: 8px;
+
+    overflow: hidden;
+
+    cursor: pointer;
+
+}
+
+.gallery-thumb img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+}
+
+
+/* CARD */
+
+.detail-card {
+
+    background: white;
+
+    border: 1px solid #eee6de;
+
+    border-radius: 15px;
+
+    padding: 30px;
+
+    margin-bottom: 25px;
+
+}
+
+.detail-card h2 {
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 28px;
+
+    margin-bottom: 25px;
+
+}
+
+
+/* OVERVIEW */
+
+.overview-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 20px;
+
+}
+
+.overview-item {
+
+    display: flex;
+
+    gap: 15px;
+
+    align-items: center;
+
+    padding: 15px;
+
+    background: #faf8f5;
+
+    border-radius: 10px;
+
+}
+
+.overview-item > i {
+
+    color: #8b5e3c;
+
+    font-size: 20px;
+
+    width: 25px;
+
+}
+
+.overview-item span {
+
+    display: block;
+
+    color: #888;
+
+    font-size: 12px;
+
+}
+
+.overview-item strong {
+
+    display: block;
+
+    margin-top: 4px;
+
+}
+
+
+/* DESCRIPTION */
+
+.property-description {
+
+    color: #666;
+
+    line-height: 1.9;
+
+}
+
+
+/* AMENITIES */
+
+.amenities-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 15px;
+
+}
+
+.amenity-item {
+
+    display: flex;
+
+    gap: 12px;
+
+    align-items: center;
+
+    padding: 14px;
+
+    background: #faf8f5;
+
+    border-radius: 8px;
+
+}
+
+.amenity-item i {
+
+    color: #8b5e3c;
+
+}
+
+
+/* VIDEO */
+
+.property-video {
+
+    width: 100%;
+
+    border-radius: 10px;
+
+}
+
+.video-link a {
+
+    color: #8b5e3c;
+
+    text-decoration: none;
+
+    font-weight: 600;
+
+}
+
+
+/* MAP */
+
+.location-address {
+
+    color: #666;
+
+}
+
+.location-address i {
+
+    color: #8b5e3c;
+
+}
+
+.map-container {
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+}
+
+.map-placeholder {
+
+    height: 300px;
+
+    background: #eee7df;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    color: #8b5e3c;
+
+}
+
+.map-placeholder i {
+
+    font-size: 50px;
+
+}
+
+
+/* ENQUIRY */
+
+.enquiry-card {
+
+    background: #332820;
+
+    color: white;
+
+    padding: 30px;
+
+    border-radius: 15px;
+
+    /* position: sticky; */
+
+    top: 100px;
+
+}
+
+.enquiry-icon {
+
+    width: 55px;
+
+    height: 55px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #8b5e3c;
+
+    border-radius: 10px;
+
+    font-size: 22px;
+
+    margin-bottom: 20px;
+
+}
+
+.enquiry-card h3 {
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 26px;
+
+}
+
+.enquiry-card p {
+
+    color: #cfc4ba;
+
+    line-height: 1.6;
+
+}
+
+.enquiry-primary-btn,
+
+.enquiry-secondary-btn,
+
+.whatsapp-btn {
+
+    display: block;
+
+    text-align: center;
+
+    padding: 13px;
+
+    border-radius: 7px;
+
+    margin-top: 12px;
+
+    text-decoration: none;
+
+    font-weight: 600;
+
+}
+
+.enquiry-primary-btn {
+
+    background: #8b5e3c;
+
+    color: white;
+
+}
+
+.enquiry-secondary-btn {
+
+    background: white;
+
+    color: #332820;
+
+}
+
+.whatsapp-btn {
+
+    background: #25d366;
+
+    color: white;
+
+}
+
+
+/* ID */
+
+.property-id-card,
+
+.quick-contact-card {
+
+    background: white;
+
+    border: 1px solid #eee6de;
+
+    border-radius: 15px;
+
+    padding: 25px;
+
+    margin-top: 20px;
+
+}
+
+.property-id-card span {
+
+    display: block;
+
+    color: #888;
+
+    font-size: 12px;
+
+}
+
+.property-id-card strong {
+
+    color: #8b5e3c;
+
+    font-size: 18px;
+
+}
+
+
+/* QUICK CONTACT */
+
+.quick-contact-card h4 {
+
+    font-family: "Playfair Display", serif;
+
+}
+
+.quick-contact-card p {
+
+    color: #666;
+
+}
+
+.quick-contact-card i {
+
+    color: #8b5e3c;
+
+    width: 20px;
+
+}
+
+
+/* MOBILE */
+
+@media(max-width: 991px) {
+
+    .property-detail-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+    .detail-price small {
+
+        text-align: left;
+
+    }
+
+    .gallery-main {
+
+        height: 400px;
+
+    }
+
+    .enquiry-card {
+
+        position: static;
+
+    }
+
+}
+
+
+@media(max-width: 576px) {
+
+    .overview-grid,
+    .amenities-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .gallery-main {
+
+        height: 300px;
+
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+
+{% block extra_js %}
+
+<script>
+
+function changePropertyImage(imageUrl) {
+
+    const mainImage =
+        document.getElementById(
+            "mainPropertyImage"
+        );
+
+    if (mainImage) {
+
+        mainImage.src = imageUrl;
+
+    }
+
+}
+
+</script>
+
+{% endblock %}

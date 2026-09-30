@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-Properties | Prime Estates
+Properties | V3 LAND VENTURES
 {% endblock %}
 
 {% block extra_css %}
@@ -603,7 +603,7 @@ Properties | Prime Estates
 
             <form
                 method="GET"
-                action="{% url 'property_list' %}"
+                action="{% url 'properties:property_list' %}"
             >
 
 
@@ -729,7 +729,7 @@ Properties | Prime Estates
 
 
                     <a
-                        href="{% url 'property_list' %}"
+                        href="{% url 'properties:property_list' %}"
                         class="filter-reset"
                     >
 
@@ -896,7 +896,7 @@ Properties | Prime Estates
 
 
                             <a
-                                href="{% url 'property_detail' property.slug %}"
+                                href="{% url 'properties:property_detail' property.slug %}"
                                 class="property-view"
                             >
 

@@ -1,35 +1,24 @@
+
 """
 URL configuration for config project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/6.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path,include
 
-from properties.views import (
-    home,
-    property_list,
-    property_detail,
-    add_property
-)
+from django.contrib import admin
+from django.urls import path, include
+from django.contrib.auth import views as auth_views
+from properties.views import home
 from enquiries.views import contact
 from about.views import about_us
+
 from django.conf import settings
 from django.conf.urls.static import static
 
 
 urlpatterns = [
+
+    # =========================================================
+    # DJANGO ADMIN
+    # =========================================================
 
     path(
         "admin/",
@@ -37,47 +26,80 @@ urlpatterns = [
     ),
 
     path(
+    "accounts/login/",
+    auth_views.LoginView.as_view(
+        template_name="registration/login.html"
+    ),
+    name="login"
+),
+    # =========================================================
+    # HOME
+    # =========================================================
+
+    path(
         "",
         home,
         name="home"
     ),
-    path(
-        "properties/",
-        property_list,
-        name="property_list"
-    ),
+
+
+    # =========================================================
+    # PROPERTIES
+    # =========================================================
 
     path(
-        "properties/<slug:slug>/",
-        property_detail,
-        name="property_detail"
+        "properties/",
+        include("properties.urls")
     ),
-     path(
-            "add/",
-            add_property,
-            name="add-property"
-        ),
+
+
+    # =========================================================
+    # CONTACT
+    # =========================================================
+
     path(
-    "contact/",
-    contact,
-    name="contact"
+        "contact/",
+        contact,
+        name="contact"
     ),
+
+
+    # =========================================================
+    # ABOUT
+    # =========================================================
+
     path(
-    "about/",
-    about_us,
-    name="about"
-),
-path(
-    "chat/",
-    include("chat.urls")
-),
-path(
-    "enquiries/",
-    include("enquiries.urls")
-),
+        "about/",
+        about_us,
+        name="about"
+    ),
+
+
+    # =========================================================
+    # CHAT
+    # =========================================================
+
+    path(
+        "chat/",
+        include("chat.urls")
+    ),
+
+
+    # =========================================================
+    # ENQUIRIES
+    # =========================================================
+
+    path(
+        "enquiries/",
+        include("enquiries.urls")
+    ),
 
 ]
 
+
+# =============================================================
+# MEDIA FILES
+# =============================================================
 
 if settings.DEBUG:
 
@@ -85,3 +107,4 @@ if settings.DEBUG:
         settings.MEDIA_URL,
         document_root=settings.MEDIA_ROOT
     )
+

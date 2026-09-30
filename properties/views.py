@@ -7,6 +7,27 @@ from django.contrib import messages
 from .models import *
 from .forms import PropertyForm
 
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import (
+    render,
+    redirect,
+    get_object_or_404,
+)
+
+from .models import (
+    Property,
+    PropertyImage,
+    PropertyVideo,
+)
+
+from .forms import (
+    PropertyForm,
+    PropertyImageForm,
+    PropertyVideoForm,
+)
+
+
 
 def home(request):
 
@@ -262,113 +283,390 @@ def save_visitor_email(request):
     })
 
 
-def add_property(request):
+# ============================================================
+# PROPERTY MANAGEMENT
+# ============================================================
+
+
+@login_required
+def property_manage(request):
+
+    properties = Property.objects.select_related(
+        "property_type"
+    ).prefetch_related(
+        "images"
+    ).all()
+
+    context = {
+        "properties": properties,
+    }
+
+    return render(
+        request,
+        "properties/property_manage.html",
+        context
+    )
+
+
+# ============================================================
+# ADD PROPERTY
+# ============================================================
+
+
+@login_required
+def property_create(request):
 
     if request.method == "POST":
 
-        form = PropertyForm(request.POST)
+        form = PropertyForm(
+            request.POST
+        )
 
         if form.is_valid():
 
-            # -----------------------------
-            # SAVE PROPERTY
-            # -----------------------------
-
             property_obj = form.save()
-
-
-            # -----------------------------
-            # SAVE PROPERTY IMAGES
-            # -----------------------------
-
-            images = request.FILES.getlist("images")
-
-            image_titles = request.POST.getlist("image_titles")
-
-            primary_image = request.POST.get("primary_image")
-
-
-            for index, image in enumerate(images):
-
-                title = ""
-
-                if index < len(image_titles):
-                    title = image_titles[index]
-
-
-                is_primary = (
-                    str(index) == str(primary_image)
-                )
-
-
-                PropertyImage.objects.create(
-                    property=property_obj,
-                    image=image,
-                    title=title,
-                    is_primary=is_primary
-                )
-
-
-            # -----------------------------
-            # SAVE PROPERTY VIDEOS
-            # -----------------------------
-
-            videos = request.FILES.getlist("videos")
-
-            video_titles = request.POST.getlist("video_titles")
-
-
-            for index, video in enumerate(videos):
-
-                title = ""
-
-                if index < len(video_titles):
-                    title = video_titles[index]
-
-
-                PropertyVideo.objects.create(
-                    property=property_obj,
-                    video=video,
-                    title=title
-                )
-
-
-            # -----------------------------
-            # SAVE VIDEO URL
-            # -----------------------------
-
-            video_url = request.POST.get("video_url")
-
-            video_url_title = request.POST.get("video_url_title")
-
-
-            if video_url:
-
-                PropertyVideo.objects.create(
-                    property=property_obj,
-                    video_url=video_url,
-                    title=video_url_title or ""
-                )
-
 
             messages.success(
                 request,
-                f"Property {property_obj.property_id} created successfully!"
+                f"Property {property_obj.property_id} created successfully."
             )
 
-
-            return redirect("properties:add-property")
-
+            return redirect(
+                "properties:property_edit",
+                pk=property_obj.pk
+            )
 
     else:
 
         form = PropertyForm()
 
 
+    context = {
+        "form": form,
+        "property_obj": None,
+        "images": [],
+        "videos": [],
+        "page_title": "Add Property",
+    }
+
     return render(
         request,
-        "properties/add_property.html",
+        "properties/property_form.html",
+        context
+    )
+
+
+# ============================================================
+# EDIT PROPERTY
+# ============================================================
+
+
+@login_required
+def property_edit(request, pk):
+
+    property_obj = get_object_or_404(
+        Property,
+        pk=pk
+    )
+
+    if request.method == "POST":
+
+        form = PropertyForm(
+            request.POST,
+            instance=property_obj
+        )
+
+        if form.is_valid():
+
+            property_obj = form.save()
+
+            messages.success(
+                request,
+                "Property updated successfully."
+            )
+
+            return redirect(
+                "properties:property_edit",
+                pk=property_obj.pk
+            )
+
+    else:
+
+        form = PropertyForm(
+            instance=property_obj
+        )
+
+
+    images = property_obj.images.all()
+    videos = property_obj.videos.all()
+
+
+    context = {
+        "form": form,
+        "property_obj": property_obj,
+        "images": images,
+        "videos": videos,
+        "page_title": "Edit Property",
+    }
+
+
+    return render(
+        request,
+        "properties/property_form.html",
+        context
+    )
+
+
+# ============================================================
+# DELETE PROPERTY
+# ============================================================
+
+
+@login_required
+def property_delete(request, pk):
+
+    property_obj = get_object_or_404(
+        Property,
+        pk=pk
+    )
+
+    if request.method == "POST":
+
+        property_id = property_obj.property_id
+
+        property_obj.delete()
+
+        messages.success(
+            request,
+            f"Property {property_id} deleted successfully."
+        )
+
+        return redirect(
+            "properties:property_manage"
+        )
+
+
+    return render(
+        request,
+        "properties/property_confirm_delete.html",
         {
-            "form": form
+            "property_obj": property_obj
         }
     )
+
+
+# ============================================================
+# ADD IMAGE
+# ============================================================
+
+
+@login_required
+def property_image_add(
+    request,
+    property_id
+):
+
+    property_obj = get_object_or_404(
+        Property,
+        pk=property_id
+    )
+
+
+    if request.method == "POST":
+
+        form = PropertyImageForm(
+            request.POST,
+            request.FILES
+        )
+
+        if form.is_valid():
+
+            image = form.save(
+                commit=False
+            )
+
+            image.property = property_obj
+
+            # If this image is primary,
+            # remove primary from existing images.
+            if image.is_primary:
+
+                PropertyImage.objects.filter(
+                    property=property_obj
+                ).update(
+                    is_primary=False
+                )
+
+            image.save()
+
+            messages.success(
+                request,
+                "Image uploaded successfully."
+            )
+
+            return redirect(
+                "properties:property_edit",
+                pk=property_obj.pk
+            )
+
+    else:
+
+        form = PropertyImageForm()
+
+
+    return render(
+        request,
+        "properties/property_image_form.html",
+        {
+            "form": form,
+            "property_obj": property_obj,
+        }
+    )
+
+
+# ============================================================
+# DELETE IMAGE
+# ============================================================
+
+
+@login_required
+def property_image_delete(
+    request,
+    image_id
+):
+
+    image = get_object_or_404(
+        PropertyImage,
+        pk=image_id
+    )
+
+    property_obj = image.property
+
+
+    if request.method == "POST":
+
+        image.delete()
+
+        messages.success(
+            request,
+            "Image deleted successfully."
+        )
+
+        return redirect(
+            "properties:property_edit",
+            pk=property_obj.pk
+        )
+
+
+    return render(
+        request,
+        "properties/property_confirm_image_delete.html",
+        {
+            "image": image,
+            "property_obj": property_obj,
+        }
+    )
+
+
+# ============================================================
+# ADD VIDEO
+# ============================================================
+
+
+@login_required
+def property_video_add(
+    request,
+    property_id
+):
+
+    property_obj = get_object_or_404(
+        Property,
+        pk=property_id
+    )
+
+
+    if request.method == "POST":
+
+        form = PropertyVideoForm(
+            request.POST,
+            request.FILES
+        )
+
+        if form.is_valid():
+
+            video = form.save(
+                commit=False
+            )
+
+            video.property = property_obj
+
+            video.save()
+
+            messages.success(
+                request,
+                "Video added successfully."
+            )
+
+            return redirect(
+                "properties:property_edit",
+                pk=property_obj.pk
+            )
+
+    else:
+
+        form = PropertyVideoForm()
+
+
+    return render(
+        request,
+        "properties/property_video_form.html",
+        {
+            "form": form,
+            "property_obj": property_obj,
+        }
+    )
+
+
+# ============================================================
+# DELETE VIDEO
+# ============================================================
+
+
+@login_required
+def property_video_delete(
+    request,
+    video_id
+):
+
+    video = get_object_or_404(
+        PropertyVideo,
+        pk=video_id
+    )
+
+    property_obj = video.property
+
+
+    if request.method == "POST":
+
+        video.delete()
+
+        messages.success(
+            request,
+            "Video deleted successfully."
+        )
+
+        return redirect(
+            "properties:property_edit",
+            pk=property_obj.pk
+        )
+
+
+    return render(
+        request,
+        "properties/property_confirm_video_delete.html",
+        {
+            "video": video,
+            "property_obj": property_obj,
+        }
+    )
+

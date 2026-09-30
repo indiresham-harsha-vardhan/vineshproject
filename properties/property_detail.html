@@ -86,58 +86,56 @@
 
         <div class="property-gallery">
 
-            <div class="gallery-main">
+    <div class="gallery-main">
 
-                {% with property.images.all|first as main_image %}
+        {% with property.images.all|first as main_image %}
 
-                    {% if main_image %}
+            {% if main_image %}
 
-                        <img
-                            src="{{ main_image.image.url }}"
-                            alt="{{ property.title }}"
-                            id="mainPropertyImage"
-                        >
+                <img
+                    src="{{ main_image.image.url }}"
+                    alt="{{ property.title }}"
+                    id="mainPropertyImage"
+                >
 
-                    {% else %}
+            {% else %}
 
-                        <div class="gallery-no-image">
+                <div class="gallery-no-image">
 
-                            <i class="fa-solid fa-house"></i>
+                    <i class="fa-solid fa-house"></i>
 
-                            <p>
-                                No Image Available
-                            </p>
+                    <p>No Image Available</p>
 
-                        </div>
+                </div>
 
-                    {% endif %}
+            {% endif %}
 
-                {% endwith %}
+        {% endwith %}
 
-            </div>
+    </div>
 
 
-            <div class="gallery-thumbnails">
+    <div class="gallery-thumbnails">
 
-                {% for image in property.images.all %}
+        {% for image in property.images.all %}
 
-                    <div
-                        class="gallery-thumb"
-                        onclick="changePropertyImage('{{ image.image.url }}')"
-                    >
+            <div
+                class="gallery-thumb"
+                data-image-url="{{ image.image.url }}"
+            >
 
-                        <img
-                            src="{{ image.image.url }}"
-                            alt="{{ image.title }}"
-                        >
-
-                    </div>
-
-                {% endfor %}
+                <img
+                    src="{{ image.image.url }}"
+                    alt="{{ image.title|default:property.title }}"
+                >
 
             </div>
 
-        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
 
 
         <!-- MAIN CONTENT -->
@@ -1243,20 +1241,31 @@
 
 <script>
 
-function changePropertyImage(imageUrl) {
+document.addEventListener("DOMContentLoaded", function () {
 
-    const mainImage =
-        document.getElementById(
-            "mainPropertyImage"
-        );
+    console.log("Property gallery JavaScript loaded");
 
-    if (mainImage) {
+    const mainImage = document.getElementById("mainPropertyImage");
 
-        mainImage.src = imageUrl;
+    const thumbnails = document.querySelectorAll(".gallery-thumb");
 
-    }
+    thumbnails.forEach(function (thumbnail) {
 
-}
+        thumbnail.addEventListener("click", function () {
+
+            const imageUrl = this.dataset.imageUrl;
+
+            if (mainImage && imageUrl) {
+
+                mainImage.src = imageUrl;
+
+            }
+
+        });
+
+    });
+
+});
 
 </script>
 
